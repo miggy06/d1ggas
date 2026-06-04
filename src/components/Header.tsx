@@ -1,9 +1,28 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Sun, Moon } from "lucide-react";
 import styles from "./Header.module.css";
 
 export default function Header() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    const initialTheme = savedTheme || "light";
+    setTheme(initialTheme);
+    document.documentElement.setAttribute("data-theme", initialTheme);
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+  };
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -40,6 +59,21 @@ export default function Header() {
           <button className={styles.navLink} onClick={() => scrollToSection("contact")}>
             Contact
           </button>
+
+          {/* Theme Toggle Button */}
+          {mounted && (
+            <button 
+              className={styles.themeToggle} 
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            >
+              {theme === "light" ? (
+                <Moon size={15} className={styles.toggleIcon} />
+              ) : (
+                <Sun size={15} className={styles.toggleIcon} />
+              )}
+            </button>
+          )}
         </nav>
       </header>
     </div>

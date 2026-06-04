@@ -98,9 +98,10 @@ export default function Home() {
           borderTop: "1px solid var(--border-color)",
           padding: "40px 24px",
           textAlign: "center",
-          backgroundColor: "#fafafa",
+          backgroundColor: "var(--bg-secondary)",
           fontSize: "0.85rem",
           color: "var(--text-muted)",
+          transition: "background-color 0.3s ease, border-color 0.3s ease",
         }}
       >
         <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>

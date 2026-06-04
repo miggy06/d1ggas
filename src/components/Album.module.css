@@ -31,7 +31,7 @@
 .uploadCard {
   height: 280px;
   border: 2px dashed var(--border-color);
-  background: #ffffff;
+  background: var(--bg-card);
   display: flex;
   flex-direction: column;
   align-items: center;

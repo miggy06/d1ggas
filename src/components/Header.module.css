@@ -12,12 +12,12 @@
 .headerContainer {
   pointer-events: auto; /* Re-enable clicks inside the header container */
   width: 90%;
-  max-width: 600px;
+  max-width: 650px; /* slightly wider to accommodate the theme toggle */
   height: 60px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--header-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--header-border);
   border-radius: 40px;
   display: flex;
   align-items: center;
@@ -59,7 +59,7 @@
 .navArea {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .navLink {
@@ -69,7 +69,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 10px 16px;
+  padding: 10px 14px;
   border-radius: 20px;
   transition: all 0.2s ease;
   background: transparent;
@@ -80,6 +80,33 @@
 .navLink:hover {
   color: var(--color-blue);
   background: rgba(17, 109, 255, 0.05);
+}
+
+.themeToggle {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  margin-left: 6px;
+  padding: 0;
+}
+
+.themeToggle:hover {
+  background: var(--bg-secondary);
+  color: var(--color-blue);
+  border-color: var(--color-blue);
+  transform: scale(1.05);
+}
+
+.toggleIcon {
+  stroke-width: 2px;
 }
 
 /* Responsive adjustments */
@@ -105,5 +132,11 @@
   .navLink {
     font-size: 0.72rem;
     padding: 8px 10px;
+  }
+
+  .themeToggle {
+    width: 28px;
+    height: 28px;
+    margin-left: 2px;
   }
 }

@@ -6,29 +6,31 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 150px 80px 80px 80px; /* large spacing to align elements and leave space for header */
-  background: radial-gradient(circle at 50% 50%, rgba(224, 238, 255, 0.75) 0%, rgba(250, 250, 250, 0.95) 100%);
+  background: var(--hero-bg-gradient);
   overflow: hidden;
   border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease;
 }
 
 .heroBgImageWrapper {
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: 0.12; /* subtle transparent background */
+  opacity: 0.35; /* increased opacity to make the background image pop and be emphasized */
   pointer-events: none;
 }
 
 .heroBgImage {
   object-fit: cover;
-  filter: grayscale(10%) contrast(105%);
+  filter: contrast(100%);
 }
 
 .heroBgOverlay {
   position: absolute;
   inset: 0;
-  /* Blend background image into the page layout */
-  background: radial-gradient(circle at 50% 50%, rgba(250, 250, 250, 0.1) 0%, rgba(250, 250, 250, 0.8) 80%);
+  /* Blend background image into the page layout with theme-sensitive gradient */
+  background: var(--hero-overlay-gradient);
+  transition: background 0.3s ease;
 }
 
 .heroContentWrapper {
@@ -206,11 +208,13 @@
 .drawer {
   width: 100%;
   max-width: 540px;
-  background: #ffffff;
+  background: var(--bg-card);
+  color: var(--text-primary);
   border: 1.5px solid var(--border-color);
   padding: 32px;
   position: relative;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .drawerClose {
@@ -230,7 +234,7 @@
 }
 
 .drawerClose:hover {
-  background: #f4f4f5;
+  background: var(--bg-secondary);
   color: var(--text-primary);
 }
 
