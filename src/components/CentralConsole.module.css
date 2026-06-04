@@ -10,72 +10,42 @@
 
 .consoleCard {
   width: 100%;
-  max-width: 600px;
-  padding: 48px;
+  max-width: 580px;
+  padding: 40px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
   position: relative;
   overflow: hidden;
+  border-radius: 6px; /* Sharp corners */
 }
 
-/* Status Badge */
-.statusBadge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  letter-spacing: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(255, 255, 255, 0.02);
-  padding: 6px 14px;
-  border-radius: 9999px;
-  text-transform: uppercase;
-}
-
-/* Huge Title */
+/* Huge Title - Sharp, flat, retro-font spacing */
 .titleContainer {
   position: relative;
 }
 
 .title {
   font-family: var(--font-sans);
-  font-size: 4.8rem;
-  font-weight: 900;
-  letter-spacing: -2px;
+  font-size: 4.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
   color: #ffffff;
   line-height: 1;
-  text-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
-}
-
-.titleGlow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-sans);
-  font-size: 4.8rem;
-  font-weight: 900;
-  letter-spacing: -2px;
-  color: var(--color-blue);
-  filter: blur(20px);
-  opacity: 0.35;
-  z-index: -1;
-  user-select: none;
-  pointer-events: none;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--color-blue);
+  padding-bottom: 8px;
 }
 
 /* Description Text */
 .description {
   font-family: var(--font-sans);
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  max-width: 480px;
+  max-width: 440px;
 }
 
 /* Tags Footer */
@@ -84,25 +54,21 @@
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .consoleCard {
-    padding: 32px 20px;
-    gap: 24px;
+    padding: 24px 16px;
+    gap: 20px;
   }
   
   .title {
-    font-size: 3.2rem;
-  }
-  
-  .titleGlow {
-    font-size: 3.2rem;
+    font-size: 3rem;
   }
   
   .description {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 }

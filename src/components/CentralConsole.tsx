@@ -23,7 +23,6 @@ export default function CentralConsole({ onInitialize }: CentralConsoleProps) {
         {/* Big Glow Title */}
         <div className={styles.titleContainer}>
           <h1 className={styles.title}>d1ggas</h1>
-          <span className={styles.titleGlow}>d1ggas</span>
         </div>
 
         {/* Description */}

@@ -9,7 +9,7 @@
   pointer-events: none;
 }
 
-/* Semi-transparent grid */
+/* Higher opacity for image visibility */
 .grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -19,29 +19,29 @@
   position: absolute;
   top: -2.5%;
   left: -2.5%;
-  gap: 20px;
+  gap: 24px;
   padding: 40px;
-  opacity: 0.28;
+  opacity: 0.55;
   transition: opacity 0.5s ease;
   pointer-events: auto; /* Enable hover */
 }
 
-/* Base style for collage items */
+/* Base style for collage items: sharp retro borders */
 .item {
   position: relative;
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: grayscale(30%) contrast(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: grayscale(15%) contrast(1.02);
 }
 
 .item:hover {
-  transform: scale(1.03) translateY(-5px);
-  filter: grayscale(0%) contrast(1.1);
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1);
+  transform: scale(1.02) translateY(-4px);
+  filter: grayscale(0%) contrast(1.05);
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   z-index: 5;
 }
 
@@ -49,42 +49,42 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
-  transition: transform 0.8s ease;
+  transition: transform 0.6s ease;
 }
 
 .item:hover .image {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 /* Custom layout positions for 5 images */
 .pos1 {
   grid-column: 1 / span 3;
   grid-row: 1 / span 5;
-  animation: floatAnim1 10s ease-in-out infinite alternate;
+  animation: floatAnim1 12s ease-in-out infinite alternate;
 }
 
 .pos2 {
   grid-column: 9 / span 4;
   grid-row: 1 / span 6;
-  animation: floatAnim2 12s ease-in-out infinite alternate;
+  animation: floatAnim2 14s ease-in-out infinite alternate;
 }
 
 .pos3 {
   grid-column: 1 / span 4;
   grid-row: 7 / span 6;
-  animation: floatAnim3 11s ease-in-out infinite alternate;
+  animation: floatAnim3 13s ease-in-out infinite alternate;
 }
 
 .pos4 {
   grid-column: 9 / span 4;
   grid-row: 7 / span 6;
-  animation: floatAnim1 14s ease-in-out infinite alternate;
+  animation: floatAnim1 15s ease-in-out infinite alternate;
 }
 
 .pos5 {
   grid-column: 4 / span 5;
   grid-row: 9 / span 4;
-  animation: floatAnim2 13s ease-in-out infinite alternate;
+  animation: floatAnim2 14s ease-in-out infinite alternate;
 }
 
 /* Floating animation keyframes */
@@ -93,7 +93,7 @@
     transform: translateY(0px) rotate(0deg);
   }
   100% {
-    transform: translateY(-12px) rotate(0.5deg);
+    transform: translateY(-8px) rotate(0.3deg);
   }
 }
 
@@ -102,31 +102,31 @@
     transform: translateY(0px) rotate(0deg);
   }
   100% {
-    transform: translateY(12px) rotate(-0.5deg);
+    transform: translateY(8px) rotate(-0.3deg);
   }
 }
 
 @keyframes floatAnim3 {
   0% {
-    transform: translateY(0px) translateUnit(0px);
+    transform: translateY(0px) translateX(0px);
   }
   100% {
-    transform: translateY(-8px) translateX(6px);
+    transform: translateY(-6px) translateX(4px);
   }
 }
 
-/* Dark gradient overlay to blend collage into the background */
+/* Lighter, flat dark linear overlay to blend images cleanly without blocking them */
 .overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(4, 8, 20, 0.4) 0%,
-    rgba(4, 8, 20, 0.85) 60%,
-    rgba(4, 8, 20, 0.98) 100%
+  background: linear-gradient(
+    to bottom,
+    rgba(4, 8, 20, 0.65) 0%,
+    rgba(4, 8, 20, 0.45) 50%,
+    rgba(4, 8, 20, 0.75) 100%
   );
   pointer-events: none;
   z-index: 1;
@@ -140,13 +140,13 @@
     gap: 12px;
     padding: 15px;
     height: 100vh;
-    opacity: 0.15;
+    opacity: 0.35;
   }
   
   .pos1, .pos2, .pos3, .pos4, .pos5 {
     grid-column: auto !important;
     grid-row: auto !important;
-    height: 180px;
+    height: 160px;
     animation: none !important;
   }
 }
