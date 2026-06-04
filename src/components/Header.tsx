@@ -1,66 +1,44 @@
 "use client";
 
 import React from "react";
-import { Users, UserPlus } from "lucide-react";
 import styles from "./Header.module.css";
-import { crewMembers } from "../data/crew";
 
-interface HeaderProps {
-  onAddFriendClick: () => void;
-  onMemberClick: (memberId: string) => void;
-}
+export default function Header() {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      // Offset scrolling slightly to account for the sticky header
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-export default function Header({ onAddFriendClick, onMemberClick }: HeaderProps) {
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <header className={styles.headerContainer}>
-      {/* Brand Pill */}
-      <div className={styles.logoArea}>
+      {/* Logo Area */}
+      <div className={styles.logoArea} onClick={() => scrollToSection("hero")}>
         <span className={styles.logoText}>d1ggas</span>
-        <span className={styles.versionBadge}>v1.0.0</span>
+        <span className={styles.logoSub}>{"// crew directory"}</span>
       </div>
 
       {/* Nav Actions */}
-      <div className={styles.navArea}>
-        {/* The Crew Hover Dropdown */}
-        <div className={styles.crewDropdownTrigger}>
-          <button className={styles.navLinkBtn}>
-            <Users size={16} />
-            <span>The Crew</span>
-          </button>
-
-          {/* Glass Dropdown Grid of 8 Friends */}
-          <div className={styles.dropdownMenu}>
-            {crewMembers.map((member) => (
-              <div
-                key={member.id}
-                className={styles.memberItem}
-                onClick={() => onMemberClick(member.id)}
-              >
-                <div
-                  className={styles.avatarCircle}
-                  style={{
-                    background: member.gradient,
-                    boxShadow: `0 0 10px ${member.color}33`,
-                    borderColor: `${member.color}40`,
-                  }}
-                >
-                  {member.initials}
-                </div>
-                <div className={styles.memberInfo}>
-                  <span className={styles.memberName}>{member.name}</span>
-                  <span className={styles.memberRole}>{member.role.split(" // ")[0]}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Add Friend Button */}
-        <button className={styles.addFriendBtn} onClick={onAddFriendClick}>
-          <UserPlus size={15} />
-          <span>Add Friend</span>
+      <nav className={styles.navArea}>
+        <button className={styles.navLink} onClick={() => scrollToSection("about")}>
+          About
         </button>
-      </div>
+        <button className={styles.navLink} onClick={() => scrollToSection("album")}>
+          Album
+        </button>
+        <button className={styles.navLink} onClick={() => scrollToSection("contact")}>
+          Contact
+        </button>
+      </nav>
     </header>
   );
 }

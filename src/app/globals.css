@@ -1,29 +1,33 @@
-/* Custom Reset & Typography */
+/* Custom Reset & Minimalist Base Styles */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+  background-color: #fafafa;
+}
+
 :root {
-  --bg-primary: #040814;
-  --bg-secondary: #081026;
-  --bg-card: rgba(8, 16, 38, 0.65);
-  --bg-card-hover: rgba(12, 24, 56, 0.8);
-  --border-color: rgba(59, 130, 246, 0.2);
-  --border-hover: rgba(59, 130, 246, 0.4);
+  --bg-primary: #fafafa;
+  --bg-secondary: #f4f4f5;
+  --bg-card: #ffffff;
+  --border-color: #e4e4e7;
+  --border-hover: #a1a1aa;
   
-  --color-blue: #3b82f6;
-  --color-cyan: #06b6d4;
-  --color-success: #10b981;
+  --color-blue: #116dff; /* Elegant Wix Blue */
+  --color-blue-dark: #004ecc;
+  
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
 
-  --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
-
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
+  
+  --max-width-content: 1000px;
 }
 
 body {
@@ -33,9 +37,11 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbar */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -50,145 +56,105 @@ body {
   background: var(--color-blue);
 }
 
-/* Background Gradients */
-.bg-glow-radial {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(4, 8, 20, 0.96) 0%, rgba(4, 8, 20, 1) 100%);
-  pointer-events: none;
-  z-index: 0;
+/* Sections and layout helpers */
+.section-container {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 100px 24px;
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Animations */
-@keyframes greenPulse {
-  0%, 100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
+.section-container:last-of-type {
+  border-bottom: none;
 }
 
-@keyframes gridFloat {
-  0%, 100% {
-    transform: translateY(0px) scale(1);
-  }
-  50% {
-    transform: translateY(-8px) scale(1.02);
-  }
+/* Typography styles matching Wix Resume CV */
+h1, h2, h3, h4 {
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
-/* Classes & Helper utilities */
-.glass-panel {
-  background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  transition: var(--transition-smooth);
-}
-
-.glass-panel:hover {
-  border-color: var(--border-hover);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Sleek flat shadow, no glow */
-}
-
-.neon-border-glow {
-  border-color: rgba(59, 130, 246, 0.4);
-}
-
-/* Pulse Dot (Flat opacity animation, no glowing shadow) */
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--color-success);
-  border-radius: 50%;
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+  position: relative;
   display: inline-block;
-  animation: greenPulse 2s infinite ease-in-out;
 }
 
-/* Interactive Text & Buttons */
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: var(--color-blue);
+}
+
+/* Interactive elements */
 .btn-primary {
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #ffffff;
-  padding: 10px 24px;
+  background: var(--color-blue);
+  color: #ffffff;
+  border: 1px solid var(--color-blue);
+  padding: 12px 32px;
   font-size: 0.95rem;
   font-weight: 600;
-  border-radius: 9999px;
+  border-radius: 0px; /* Flat sharp edges */
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: var(--transition-smooth);
+  transition: all 0.2s ease;
   font-family: var(--font-sans);
+  text-decoration: none;
 }
 
 .btn-primary:hover {
-  background: transparent;
-  color: #ffffff;
-  transform: translateY(-2px);
-  /* No glows */
+  background: var(--color-blue-dark);
+  border-color: var(--color-blue-dark);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  padding: 8px 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border-radius: 9999px;
+  border: 1px solid var(--text-primary);
+  padding: 12px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 0px;
   cursor: pointer;
-  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
   font-family: var(--font-sans);
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
-  border-color: var(--color-blue);
-  background: rgba(59, 130, 246, 0.05);
-  /* No glows */
+  background: var(--text-primary);
+  color: var(--bg-primary);
 }
 
-/* Header link styling */
-.nav-link {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: var(--transition-smooth);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 8px;
-}
-
-.nav-link:hover {
+/* Forms */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  background: #ffffff;
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.03);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
 }
 
-/* Pill Labels */
-.tag-pill {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-weight: 500;
-  transition: var(--transition-smooth);
-}
-
-.tag-pill:hover {
+.form-input:focus {
+  outline: none;
   border-color: var(--color-blue);
-  color: var(--color-blue);
-  background: rgba(59, 130, 246, 0.05);
 }
