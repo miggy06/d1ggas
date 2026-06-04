@@ -67,7 +67,7 @@ export default function Home() {
               alt="D1GGAS background blurred fill"
               fill
               priority
-              sizes="100vw"
+              unoptimized
               className={styles.heroBgImageBlur}
             />
             {/* Crisp unzoomed contained centered image */}
@@ -76,7 +76,7 @@ export default function Home() {
               alt="D1GGAS background lego and crew hands"
               fill
               priority
-              sizes="100vw"
+              unoptimized
               className={styles.heroBgImageSharp}
             />
             {/* Overlay Gradient to soften edges and match Wix look */}
