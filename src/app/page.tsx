@@ -59,25 +59,15 @@ export default function Home() {
         
         {/* 1. Hero Section (Sapir Roche style) */}
         <section id="hero" className={styles.heroContainer}>
-          {/* Layered Background Image to fill screen beautifully without zoom/blur issues */}
+          {/* Subtle Background Image with Opacity */}
           <div ref={heroBgRef} className={styles.heroBgImageWrapper}>
-            {/* Blurred background fill to prevent empty sidebars */}
-            <Image
-              src="/assets/d1ggas_bg.png"
-              alt="D1GGAS background blurred fill"
-              fill
-              priority
-              unoptimized
-              className={styles.heroBgImageBlur}
-            />
-            {/* Crisp unzoomed contained centered image */}
             <Image
               src="/assets/d1ggas_bg.png"
               alt="D1GGAS background lego and crew hands"
               fill
               priority
               unoptimized
-              className={styles.heroBgImageSharp}
+              className={styles.heroBgImage}
             />
             {/* Overlay Gradient to soften edges and match Wix look */}
             <div className={styles.heroBgOverlay} />

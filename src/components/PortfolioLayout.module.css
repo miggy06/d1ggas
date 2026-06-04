@@ -20,22 +20,10 @@
   pointer-events: none;
 }
 
-.heroBgImageBlur {
-  object-fit: cover !important; /* Fills entire background block smoothly */
+.heroBgImage {
+  object-fit: cover !important; /* Fills the entire page background container */
   width: 100% !important;
   height: 100% !important;
-  filter: blur(40px) brightness(0.95);
-  opacity: 0.4; /* gentle background warm bleed */
-}
-
-.heroBgImageSharp {
-  object-fit: contain !important; /* Prevents zooming/cropping so image layout is completely crisp and unzoomed */
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 950px; /* limits zoom-up to keep it extremely sharp */
-  max-height: 65vh;
-  margin: auto;
-  inset: 0 !important;
 }
 
 .heroBgOverlay {
