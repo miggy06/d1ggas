@@ -38,39 +38,44 @@ export default function Home() {
       <main style={{ width: "100%", margin: "0 auto" }}>
         
         {/* 1. Hero Section (Sapir Roche style) */}
-        <section id="hero" className="section-container" style={{ borderBottom: "1px solid var(--border-color)" }}>
-          <div className={styles.heroSection}>
-            {/* Left Content Column */}
-            <div className={styles.heroContent}>
-              <span className={styles.heroSub}>Est. 2023 // Crew Mainframe</span>
-              <h1 className={styles.heroTitle}>d1ggas</h1>
-              <p className={styles.heroText}>
-                Connected by chaos, defined by style. We are a collaborative group of eight friends
-                sharing highlights, memories, and tracking our growth together in our dedicated digital sanctuary.
-              </p>
-              <div className={styles.heroActions}>
-                <button className="btn-primary" onClick={scrollToAbout}>
-                  Explore The Crew
-                </button>
-                <button className="btn-secondary" onClick={scrollToContact}>
-                  Get In Touch
-                </button>
-              </div>
+        <section id="hero" className={styles.heroContainer}>
+          {/* Subtle Background Image with Opacity */}
+          <div className={styles.heroBgImageWrapper}>
+            <Image
+              src="/assets/d1ggas_bg.png"
+              alt="D1GGAS background lego and crew hands"
+              fill
+              priority
+              sizes="100vw"
+              className={styles.heroBgImage}
+            />
+            {/* Overlay Gradient to soften edges and match Wix look */}
+            <div className={styles.heroBgOverlay} />
+          </div>
+
+          <div className={styles.heroContentWrapper}>
+            {/* Top row: Small meta details */}
+            <div className={styles.heroTopMeta}>
+              <span className={styles.heroSubText}>Est. 2023 // Crew Mainframe</span>
             </div>
 
-            {/* Right Photo Column */}
-            <div className={styles.imageFrameContainer}>
-              <div className={styles.imageFrame}>
-                <div className={styles.imageInner}>
-                  <Image
-                    src="/assets/collage_1.png"
-                    alt="d1ggas crew group portrait"
-                    fill
-                    priority
-                    sizes="(max-width: 900px) 100vw, 400px"
-                    className={styles.heroImage}
-                  />
-                </div>
+            {/* Middle part: Giant title "D1GGAS" */}
+            <div className={styles.heroTitleContainer}>
+              <h1 className={styles.heroTitleMain}>D1GGAS</h1>
+            </div>
+
+            {/* Bottom row: Subtitle on left, "Work with Me" toggle style button on right */}
+            <div className={styles.heroBottomRow}>
+              <div className={styles.heroDescription}>
+                <p>Connected by chaos, defined by style.</p>
+                <p>A digital sanctuary for eight friends sharing memories and tracking progress.</p>
+              </div>
+
+              <div className={styles.heroToggleWrapper}>
+                <button className={styles.togglePill} onClick={scrollToContact}>
+                  <span className={styles.toggleText}>Explore Crew</span>
+                  <span className={styles.toggleCircle} />
+                </button>
               </div>
             </div>
           </div>
