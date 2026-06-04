@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import Header from "../components/Header";
 import AboutSection from "../components/AboutSection";
@@ -9,6 +9,26 @@ import ContactSection from "../components/ContactSection";
 import styles from "../components/PortfolioLayout.module.css";
 
 export default function Home() {
+  const heroBgRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const element = heroBgRef.current;
+      if (!element) return;
+      const scrollY = window.scrollY;
+      // Linearly fade the opacity from 0.38 to 0 over 500px of scrolling
+      const opacity = Math.max(0, 1 - scrollY / 500) * 0.38;
+      element.style.opacity = opacity.toString();
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Run initially to align with current scroll position
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const scrollToAbout = () => {
     const element = document.getElementById("about");
     if (element) {
@@ -40,7 +60,7 @@ export default function Home() {
         {/* 1. Hero Section (Sapir Roche style) */}
         <section id="hero" className={styles.heroContainer}>
           {/* Subtle Background Image with Opacity */}
-          <div className={styles.heroBgImageWrapper}>
+          <div ref={heroBgRef} className={styles.heroBgImageWrapper}>
             <Image
               src="/assets/d1ggas_bg.png"
               alt="D1GGAS background lego and crew hands"
