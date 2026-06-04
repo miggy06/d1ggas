@@ -32,7 +32,7 @@ html {
 
   /* Gradients for Sapir Roche Hero */
   --hero-bg-gradient: radial-gradient(circle at 50% 50%, rgba(224, 238, 255, 0.75) 0%, rgba(250, 250, 250, 0.95) 100%);
-  --hero-overlay-gradient: radial-gradient(circle at 50% 50%, rgba(250, 250, 250, 0.1) 0%, rgba(250, 250, 250, 0.85) 80%);
+  --hero-overlay-gradient: radial-gradient(circle at 50% 50%, rgba(250, 250, 250, 0) 0%, rgba(250, 250, 250, 0.95) 90%);
   
   /* Header variables */
   --header-bg: rgba(255, 255, 255, 0.95);
@@ -54,8 +54,8 @@ html {
   --text-muted: #71717a;
   
   /* Dark Sapir Roche gradients */
-  --hero-bg-gradient: radial-gradient(circle at 50% 50%, rgba(17, 34, 64, 0.75) 0%, rgba(9, 9, 11, 0.98) 100%);
-  --hero-overlay-gradient: radial-gradient(circle at 50% 50%, rgba(9, 9, 11, 0.15) 0%, rgba(9, 9, 11, 0.92) 80%);
+  --hero-bg-gradient: radial-gradient(circle at 50% 50%, rgba(17, 43, 91, 0.6) 0%, rgba(9, 9, 11, 0.98) 100%);
+  --hero-overlay-gradient: radial-gradient(circle at 50% 50%, rgba(9, 9, 11, 0) 0%, rgba(9, 9, 11, 0.98) 90%);
   
   /* Dark Header variables */
   --header-bg: rgba(18, 18, 20, 0.95);
