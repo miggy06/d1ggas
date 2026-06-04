@@ -18,11 +18,7 @@ export default function CentralConsole({ onInitialize }: CentralConsoleProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Status Badge */}
-        <div className={styles.statusBadge}>
-          <span className="pulse-dot" />
-          <span>All Systems Nominal // Archive_Active</span>
-        </div>
+
 
         {/* Big Glow Title */}
         <div className={styles.titleContainer}>
@@ -50,8 +46,6 @@ export default function CentralConsole({ onInitialize }: CentralConsoleProps) {
         {/* Metadata Tags */}
         <div className={styles.tagsContainer}>
           <span className="tag-pill">Est. 2023</span>
-          <span className="tag-pill">Minimalist</span>
-          <span className="tag-pill">Interactive</span>
         </div>
       </motion.div>
     </div>

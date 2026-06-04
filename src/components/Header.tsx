@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Users, UserPlus, Terminal } from "lucide-react";
+import { Users, UserPlus } from "lucide-react";
 import styles from "./Header.module.css";
 import { crewMembers } from "../data/crew";
 
@@ -15,9 +15,6 @@ export default function Header({ onAddFriendClick, onMemberClick }: HeaderProps)
     <header className={styles.headerContainer}>
       {/* Brand Pill */}
       <div className={styles.logoArea}>
-        <div className={styles.logoIcon}>
-          <Terminal size={18} />
-        </div>
         <span className={styles.logoText}>d1ggas</span>
         <span className={styles.versionBadge}>v1.0.0</span>
       </div>
