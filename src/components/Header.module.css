@@ -5,57 +5,58 @@
   transform: translateX(-50%);
   width: 90%;
   max-width: 800px;
-  height: 56px;
+  height: 64px;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  background: rgba(10, 11, 18, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-color);
-  border-radius: 6px; /* Sharp retro look */
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5); /* Flat shadow */
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 0 24px;
+  background: rgba(8, 14, 32, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 9999px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* No neon glow */
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .headerContainer:hover {
-  border-color: #ffffff;
-  box-shadow: 6px 6px 0px rgba(59, 130, 246, 0.3);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6); /* No glows */
 }
 
 /* Logo Pill styling */
 .logoArea {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .logoText {
-  font-family: var(--font-mono);
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 800;
   letter-spacing: -0.5px;
-  color: #ffffff;
-  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff 30%, var(--color-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .versionBadge {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--color-blue);
-  border: 1px solid var(--border-color);
-  background: rgba(59, 130, 246, 0.05);
-  padding: 1px 5px;
-  border-radius: 2px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2px 6px;
+  border-radius: 6px;
 }
 
 /* Nav Menu area */
 .navArea {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 /* The Crew relative container for hover dropdown */
@@ -67,47 +68,45 @@
 
 .navLinkBtn {
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
   font-weight: 500;
-  text-transform: uppercase;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
-  border-radius: 4px;
+  padding: 8px 16px;
+  border-radius: 9999px;
   transition: var(--transition-smooth);
 }
 
 .navLinkBtn:hover, .navLinkBtnActive {
   color: #ffffff;
-  border-color: var(--border-color);
-  background: rgba(59, 130, 246, 0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* Dropdown Menu styling - Sharp & Flat */
+/* Dropdown Menu styling */
 .dropdownMenu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 12px);
   right: -80px;
-  width: 440px;
-  background: rgba(8, 9, 14, 0.98);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.6);
-  padding: 12px;
+  width: 480px;
+  background: rgba(6, 11, 28, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); /* No glows */
+  padding: 16px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 12px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateY(15px) scale(0.95);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
@@ -115,7 +114,7 @@
 .crewDropdownTrigger:hover .dropdownMenu {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   pointer-events: auto;
 }
 
@@ -123,31 +122,31 @@
 .memberItem {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-radius: 4px;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 12px;
   border: 1px solid transparent;
   transition: var(--transition-smooth);
   cursor: pointer;
 }
 
 .memberItem:hover {
-  background: rgba(59, 130, 246, 0.06);
-  border-color: rgba(59, 130, 246, 0.25);
-  transform: translateY(-1px);
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.2);
+  transform: translateX(3px);
 }
 
 .avatarCircle {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px; /* Sharp avatar boxes */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
   background-size: cover;
   background-position: center;
   position: relative;
@@ -157,32 +156,29 @@
 .memberInfo {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 }
 
 .memberName {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .memberRole {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--text-muted);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
 }
 
 /* Add Friend button styling */
 .addFriendBtn {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
   color: #ffffff;
-  border: 1px solid var(--border-color);
-  padding: 6px 14px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px 16px;
+  font-size: 0.85rem;
   font-weight: 600;
-  text-transform: uppercase;
-  border-radius: 4px;
+  border-radius: 9999px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -194,21 +190,21 @@
   background: #ffffff;
   color: #000000;
   border-color: #ffffff;
-  transform: translate(-1px, -1px);
-  box-shadow: 2px 2px 0px var(--color-blue);
+  transform: translateY(-1px);
+  /* No glows */
 }
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
   .headerContainer {
     width: 95%;
-    padding: 0 12px;
-    height: 52px;
+    padding: 0 16px;
+    height: 56px;
     top: 12px;
   }
 
   .logoText {
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
   
   .versionBadge {
@@ -224,12 +220,12 @@
   }
   
   .navLinkBtn, .addFriendBtn {
-    padding: 6px;
+    padding: 8px;
   }
 
   .dropdownMenu {
-    width: 260px;
+    width: 290px;
     grid-template-columns: 1fr;
-    right: -80px;
+    right: -100px;
   }
 }

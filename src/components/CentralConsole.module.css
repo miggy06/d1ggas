@@ -10,42 +10,54 @@
 
 .consoleCard {
   width: 100%;
-  max-width: 580px;
-  padding: 40px;
+  max-width: 600px;
+  padding: 48px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
   position: relative;
   overflow: hidden;
-  border-radius: 6px; /* Sharp corners */
 }
 
-/* Huge Title - Sharp, flat, retro-font spacing */
+/* Status Badge */
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+/* Huge Title - No neon blurs */
 .titleContainer {
   position: relative;
 }
 
 .title {
   font-family: var(--font-sans);
-  font-size: 4.5rem;
-  font-weight: 800;
-  letter-spacing: -1px;
+  font-size: 4.8rem;
+  font-weight: 900;
+  letter-spacing: -2px;
   color: #ffffff;
   line-height: 1;
-  text-transform: uppercase;
-  border-bottom: 2px solid var(--color-blue);
-  padding-bottom: 8px;
 }
 
 /* Description Text */
 .description {
   font-family: var(--font-sans);
-  font-size: 0.98rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  max-width: 440px;
+  max-width: 480px;
 }
 
 /* Tags Footer */
@@ -54,21 +66,21 @@
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .consoleCard {
-    padding: 24px 16px;
-    gap: 20px;
+    padding: 32px 20px;
+    gap: 24px;
   }
   
   .title {
-    font-size: 3rem;
+    font-size: 3.2rem;
   }
   
   .description {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 }
