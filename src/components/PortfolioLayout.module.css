@@ -16,19 +16,14 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: 0.50; /* 50% opacity to reduce transparency and make the image clearly visible */
+  opacity: 0.38; /* Fills the whole page and remains clearly visible without clashing with the text */
   pointer-events: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .heroBgImage {
-  object-fit: contain !important; /* Prevents zooming/cropping to preserve original image aspect ratio and clarity */
-  max-width: 900px !important;    /* Restricts max width so the image does not stretch past its sharp resolution */
-  max-height: 65vh !important;    /* Restricts max height to fit viewport without cropping */
-  inset: 0 !important;
-  margin: auto !important;
+  object-fit: cover !important; /* Fills the entire page background container */
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .heroBgOverlay {
