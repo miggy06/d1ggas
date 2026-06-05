@@ -1,16 +1,57 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./PortfolioLayout.module.css";
 import { crewMembers, CrewMember } from "../data/crew";
 
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
 export default function AboutSection() {
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      // 1. Reveal section heading and description
+      gsap.from("#about h2, #about p", {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: "#about",
+          start: "top 80%",
+          toggleActions: "play none none none"
+        }
+      });
+
+      // 2. Staggered reveal for crew cards grid
+      gsap.from(`.${styles.crewCard}`, {
+        opacity: 0,
+        y: 50,
+        scale: 0.95,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: `.${styles.crewGrid}`,
+          start: "top 85%",
+          toggleActions: "play none none none"
+        }
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="about" className="section-container">
+    <section id="about" className="section-container" ref={sectionRef}>
       <h2 className="section-title">About Us</h2>
       
       <p style={{ color: "var(--text-secondary)", marginBottom: "40px", maxWidth: "600px" }}>

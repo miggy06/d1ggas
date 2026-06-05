@@ -2,31 +2,67 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Header from "../components/Header";
 import AboutSection from "../components/AboutSection";
 import AlbumSection from "../components/AlbumSection";
 import ContactSection from "../components/ContactSection";
 import styles from "../components/PortfolioLayout.module.css";
 
+// Register GSAP ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Home() {
   const heroBgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const element = heroBgRef.current;
-      if (!element) return;
-      const scrollY = window.scrollY;
-      // Linearly fade the opacity from 0.38 to 0 over 500px of scrolling
-      const opacity = Math.max(0, 1 - scrollY / 500) * 0.38;
-      element.style.opacity = opacity.toString();
-    };
+    // GSAP Context handles automatic cleanups in React
+    let ctx = gsap.context(() => {
+      // 1. Background Image Parallax & Fade-out on scroll
+      gsap.to(heroBgRef.current, {
+        opacity: 0,
+        y: 120, // smooth parallax offset
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        }
+      });
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Run initially to align with current scroll position
+      // 2. Entrance Staggered reveals for Hero contents
+      const tl = gsap.timeline();
+      
+      tl.from(`.${styles.heroSubText}`, {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out"
+      })
+      .from(`.${styles.heroTitleMain}`, {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        ease: "power4.out"
+      }, "-=0.6")
+      .from(`.${styles.heroDescription} p`, {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power3.out"
+      }, "-=0.5")
+      .from(`.${styles.togglePill}`, {
+        scale: 0.9,
+        opacity: 0,
+        duration: 0.6,
+        ease: "back.out(1.5)"
+      }, "-=0.4");
+    });
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => ctx.revert(); // revert and clean up GSAP animations
   }, []);
 
   const scrollToAbout = () => {
