@@ -25,8 +25,8 @@ export default function AboutSection() {
         stagger: 0.2,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: "#about",
-          start: "top 80%",
+          trigger: sectionRef.current,
+          start: "top 85%",
           toggleActions: "play none none none"
         }
       });
@@ -34,18 +34,18 @@ export default function AboutSection() {
       // 2. Staggered reveal for crew cards grid
       gsap.from(`.${styles.crewCard}`, {
         opacity: 0,
-        y: 50,
+        y: 40,
         scale: 0.95,
         duration: 0.8,
-        stagger: 0.1,
+        stagger: 0.08,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: `.${styles.crewGrid}`,
-          start: "top 85%",
+          trigger: sectionRef.current,
+          start: "top 70%",
           toggleActions: "play none none none"
         }
       });
-    }, sectionRef);
+    }); // Omit sectionRef scope argument to resolve context lookup bug
 
     return () => ctx.revert();
   }, []);

@@ -27,8 +27,8 @@ export default function ContactSection() {
         duration: 0.8,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: "#contact",
-          start: "top 80%",
+          trigger: sectionRef.current,
+          start: "top 85%",
           toggleActions: "play none none none"
         }
       });
@@ -40,8 +40,8 @@ export default function ContactSection() {
         duration: 0.9,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: "#contact",
-          start: "top 75%",
+          trigger: sectionRef.current,
+          start: "top 70%",
           toggleActions: "play none none none"
         }
       });
@@ -53,12 +53,12 @@ export default function ContactSection() {
         duration: 0.9,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: "#contact",
-          start: "top 75%",
+          trigger: sectionRef.current,
+          start: "top 70%",
           toggleActions: "play none none none"
         }
       });
-    }, sectionRef);
+    }); // Omit sectionRef scope argument to resolve context lookup bug
 
     return () => ctx.revert();
   }, []);

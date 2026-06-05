@@ -59,8 +59,8 @@ export default function AlbumSection() {
         stagger: 0.2,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: "#album",
-          start: "top 80%",
+          trigger: sectionRef.current,
+          start: "top 85%",
           toggleActions: "play none none none"
         }
       });
@@ -75,12 +75,12 @@ export default function AlbumSection() {
         stagger: 0.08,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: `.${styles.albumGrid}`,
-          start: "top 85%",
+          trigger: sectionRef.current,
+          start: "top 70%",
           toggleActions: "play none none none"
         }
       });
-    }, sectionRef);
+    }); // Omit sectionRef scope argument to resolve context lookup bug
 
     return () => ctx.revert();
   }, []);

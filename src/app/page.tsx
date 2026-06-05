@@ -62,7 +62,15 @@ export default function Home() {
       }, "-=0.4");
     });
 
-    return () => ctx.revert(); // revert and clean up GSAP animations
+    // Refresh ScrollTrigger positions after page finishes rendering to avoid height calculation offsets
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 600);
+
+    return () => {
+      ctx.revert();
+      clearTimeout(timer);
+    };
   }, []);
 
   const scrollToAbout = () => {
