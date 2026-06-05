@@ -114,19 +114,20 @@ export default function ContactSection() {
           {status === "success" ? (
             <div
               style={{
-                background: "#ecfdf5",
-                border: "1px solid #a7f3d0",
+                background: "var(--success-bg)",
+                border: "1px solid var(--success-border)",
                 padding: "24px",
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "12px",
+                transition: "background-color 0.3s ease, border-color 0.3s ease",
               }}
             >
-              <Sparkles size={24} style={{ color: "#10b981" }} />
-              <h4 style={{ color: "#065f46" }}>Message Transmitted!</h4>
-              <p style={{ color: "#047857", fontSize: "0.88rem" }}>
+              <Sparkles size={24} style={{ color: "var(--success-text)" }} />
+              <h4 style={{ color: "var(--success-text)" }}>Message Transmitted!</h4>
+              <p style={{ color: "var(--success-muted)", fontSize: "0.88rem" }}>
                 Thank you. Your message has been sent to our system mainframe.
               </p>
               <button

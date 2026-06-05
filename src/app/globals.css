@@ -37,6 +37,12 @@ html {
   /* Header variables */
   --header-bg: rgba(255, 255, 255, 0.95);
   --header-border: rgba(0, 0, 0, 0.08);
+  
+  /* Success box variables */
+  --success-bg: #ecfdf5;
+  --success-border: #a7f3d0;
+  --success-text: #065f46;
+  --success-muted: #047857;
 }
 
 [data-theme='dark'] {
@@ -60,6 +66,12 @@ html {
   /* Dark Header variables */
   --header-bg: rgba(18, 18, 20, 0.95);
   --header-border: rgba(255, 255, 255, 0.08);
+
+  /* Dark Success box variables */
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --success-border: rgba(16, 185, 129, 0.35);
+  --success-text: #34d399;
+  --success-muted: #a7f3d0;
 }
 
 body {
@@ -180,11 +192,11 @@ h1, h2, h3, h4 {
   width: 100%;
   padding: 12px;
   border: 1px solid var(--border-color);
-  background: #ffffff;
+  background: var(--bg-card);
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 0.95rem;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.3s ease;
 }
 
 .form-input:focus {
