@@ -40,7 +40,19 @@ const defaultImages: AlbumImage[] = [
   },
 ];
 
-// Helper to compress images client-side before saving to localStorage
+// Helper to convert base64 image data to a binary Blob
+const base64ToBlob = (base64DataUrl: string): Blob => {
+  const byteString = atob(base64DataUrl.split(',')[1]);
+  const mimeString = base64DataUrl.split(',')[0].split(':')[1].split(';')[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
+};
+
+// Helper to compress images client-side before uploading
 const compressImage = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -92,7 +104,6 @@ const saveToLocalStorage = (key: string, data: any) => {
     localStorage.setItem(key, JSON.stringify(data));
   } catch (e) {
     console.error("Storage write error:", e);
-    alert("Mainframe storage is full! Please delete some existing custom photos first to free up space.");
   }
 };
 
@@ -120,51 +131,87 @@ const itemVariants: Variants = {
 
 export default function AlbumSection() {
   const [images, setImages] = useState<AlbumImage[]>([]);
+  const [loading, setLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load photos on mount
+  // Load photos on mount from Vercel Blob cloud bucket
   useEffect(() => {
-    const savedCustom = localStorage.getItem("d1ggas_custom_images");
-    const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
-
-    const activeDefaults = defaultImages.filter((img) => !deletedDefaults.includes(img.id));
-
-    if (savedCustom) {
+    const fetchImages = async () => {
       try {
-        const customImgs = JSON.parse(savedCustom) as AlbumImage[];
-        setImages([...customImgs, ...activeDefaults]);
+        const response = await fetch("/api/images");
+        const data = await response.json();
+
+        const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
+        const activeDefaults = defaultImages.filter((img) => !deletedDefaults.includes(img.id));
+
+        if (data.success && data.blobs) {
+          const customImgs: AlbumImage[] = data.blobs.map((blob: any) => ({
+            id: blob.url,
+            src: blob.url,
+            alt: blob.pathname.split("/").pop() || "uploaded image",
+          }));
+          
+          setImages([...customImgs, ...activeDefaults]);
+        } else {
+          setImages(activeDefaults);
+        }
       } catch (e) {
+        console.error("Failed to fetch cloud images:", e);
+        // Fallback to loading local defaults
+        const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
+        const activeDefaults = defaultImages.filter((img) => !deletedDefaults.includes(img.id));
         setImages(activeDefaults);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      setImages(activeDefaults);
-    }
+    };
+
+    fetchImages();
   }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
+    setLoading(true);
     const newImages: AlbumImage[] = [];
+    
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
+        // 1. Compress image to small footprint (~80KB)
         const compressedBase64 = await compressImage(file);
+        
+        // 2. Decode base64 to binary Blob
+        const blob = base64ToBlob(compressedBase64);
+        
+        // 3. Upload binary file to Vercel Blob API endpoint
+        const response = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
+          method: "POST",
+          body: blob,
+        });
+
+        if (!response.ok) {
+          throw new Error("Mainframe cloud upload failed");
+        }
+
+        const uploadedBlob = await response.json();
+        
         newImages.push({
-          id: `custom-img-${Date.now()}-${i}-${Math.random().toString(36).substr(2, 9)}`,
-          src: compressedBase64,
+          id: uploadedBlob.url,
+          src: uploadedBlob.url,
           alt: file.name,
         });
       } catch (err) {
-        console.error("Failed to compress image:", err);
+        console.error("Failed to upload image:", err);
+        alert(`Error uploading ${file.name}. Please ensure Vercel Blob storage is connected in your dashboard.`);
       }
     }
 
     if (newImages.length > 0) {
       setImages((prev) => {
-        const customOnly = prev.filter((img) => img.id.startsWith("custom-img-"));
+        const customOnly = prev.filter((img) => img.id.startsWith("https://"));
         const updatedCustom = [...newImages, ...customOnly];
-        saveToLocalStorage("d1ggas_custom_images", updatedCustom);
 
         const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
         const activeDefaults = defaultImages.filter((img) => !deletedDefaults.includes(img.id));
@@ -173,28 +220,40 @@ export default function AlbumSection() {
       });
     }
 
+    setLoading(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset file input
     }
   };
 
-  const handleDeleteImage = (id: string) => {
-    setImages((prev) => {
-      const updated = prev.filter((img) => img.id !== id);
+  const handleDeleteImage = async (id: string) => {
+    // Optimistically update the UI
+    setImages((prev) => prev.filter((img) => img.id !== id));
 
-      if (id.startsWith("custom-img-")) {
-        const customOnly = updated.filter((img) => img.id.startsWith("custom-img-"));
-        saveToLocalStorage("d1ggas_custom_images", customOnly);
-      } else {
-        const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
-        if (!deletedDefaults.includes(id)) {
-          const newDeleted = [...deletedDefaults, id];
-          saveToLocalStorage("d1ggas_deleted_default_ids", newDeleted);
+    if (id.startsWith("https://")) {
+      // Cloud image: dispatch DELETE request to API route
+      try {
+        const response = await fetch("/api/images", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ url: id }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to delete from cloud store");
         }
+      } catch (err) {
+        console.error("Cloud deletion failed:", err);
       }
-
-      return updated;
-    });
+    } else {
+      // Default image: save deletion in localStorage
+      const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
+      if (!deletedDefaults.includes(id)) {
+        const newDeleted = [...deletedDefaults, id];
+        saveToLocalStorage("d1ggas_deleted_default_ids", newDeleted);
+      }
+    }
   };
 
   return (
@@ -230,9 +289,12 @@ export default function AlbumSection() {
             ref={fileInputRef}
             onChange={handleFileChange}
             className={styles.hiddenInput}
+            disabled={loading}
           />
           <Plus size={32} className={styles.uploadIcon} />
-          <span className={styles.uploadText}>Upload Memory</span>
+          <span className={styles.uploadText}>
+            {loading ? "Uploading..." : "Upload Memory"}
+          </span>
           <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>JPEG / PNG / WebP</span>
         </motion.label>
 
