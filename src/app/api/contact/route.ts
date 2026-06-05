@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     // Determine target recipient.
     // NOTE: On Resend's free tier (using onboarding@resend.dev), Resend will restrict
     // transmission delivery ONLY to the email address registered to your Resend account.
-    const recipient = process.env.CONTACT_RECIPIENT_EMAIL || "crew@d1ggas.com";
+    const recipient = process.env.CONTACT_RECIPIENT_EMAIL || "randelf.amper@jmc.edu.ph";
 
     // Send email via Resend
     const { data, error } = await resend.emails.send({
