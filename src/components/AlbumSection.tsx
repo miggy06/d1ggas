@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Plus, Trash2 } from "lucide-react";
 import { motion, Variants } from "framer-motion";
@@ -40,6 +40,62 @@ const defaultImages: AlbumImage[] = [
   },
 ];
 
+// Helper to compress images client-side before saving to localStorage
+const compressImage = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new window.Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 1200;
+        const MAX_HEIGHT = 1200;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(event.target?.result as string);
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+        // Export as JPEG at 0.75 quality for small footprint
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
+        resolve(dataUrl);
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+};
+
+const saveToLocalStorage = (key: string, data: any) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    console.error("Storage write error:", e);
+    alert("Mainframe storage is full! Please delete some existing custom photos first to free up space.");
+  }
+};
+
 const gridVariants: Variants = {
   hidden: {},
   visible: {
@@ -63,32 +119,82 @@ const itemVariants: Variants = {
 };
 
 export default function AlbumSection() {
-  const [images, setImages] = useState<AlbumImage[]>(defaultImages);
+  const [images, setImages] = useState<AlbumImage[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Load photos on mount
+  useEffect(() => {
+    const savedCustom = localStorage.getItem("d1ggas_custom_images");
+    const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
+
+    const activeDefaults = defaultImages.filter((img) => !deletedDefaults.includes(img.id));
+
+    if (savedCustom) {
+      try {
+        const customImgs = JSON.parse(savedCustom) as AlbumImage[];
+        setImages([...customImgs, ...activeDefaults]);
+      } catch (e) {
+        setImages(activeDefaults);
+      }
+    } else {
+      setImages(activeDefaults);
+    }
+  }, []);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     const newImages: AlbumImage[] = [];
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const localUrl = URL.createObjectURL(file);
-      newImages.push({
-        id: `custom-img-${Date.now()}-${i}`,
-        src: localUrl,
-        alt: file.name,
+      try {
+        const compressedBase64 = await compressImage(file);
+        newImages.push({
+          id: `custom-img-${Date.now()}-${i}-${Math.random().toString(36).substr(2, 9)}`,
+          src: compressedBase64,
+          alt: file.name,
+        });
+      } catch (err) {
+        console.error("Failed to compress image:", err);
+      }
+    }
+
+    if (newImages.length > 0) {
+      setImages((prev) => {
+        const customOnly = prev.filter((img) => img.id.startsWith("custom-img-"));
+        const updatedCustom = [...newImages, ...customOnly];
+        saveToLocalStorage("d1ggas_custom_images", updatedCustom);
+
+        const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
+        const activeDefaults = defaultImages.filter((img) => !deletedDefaults.includes(img.id));
+
+        return [...updatedCustom, ...activeDefaults];
       });
     }
 
-    setImages((prev) => [...newImages, ...prev]); // Prepend new uploads
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset file input
     }
   };
 
   const handleDeleteImage = (id: string) => {
-    setImages((prev) => prev.filter((img) => img.id !== id));
+    setImages((prev) => {
+      const updated = prev.filter((img) => img.id !== id);
+
+      if (id.startsWith("custom-img-")) {
+        const customOnly = updated.filter((img) => img.id.startsWith("custom-img-"));
+        saveToLocalStorage("d1ggas_custom_images", customOnly);
+      } else {
+        const deletedDefaults = JSON.parse(localStorage.getItem("d1ggas_deleted_default_ids") || "[]") as string[];
+        if (!deletedDefaults.includes(id)) {
+          const newDeleted = [...deletedDefaults, id];
+          saveToLocalStorage("d1ggas_deleted_default_ids", newDeleted);
+        }
+      }
+
+      return updated;
+    });
   };
 
   return (
