@@ -9,18 +9,39 @@ export default function ContactSection() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !message) return;
 
     setStatus("transmitting");
-    setTimeout(() => {
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to transmit message.");
+      }
+
       setStatus("success");
       setName("");
       setEmail("");
       setMessage("");
-    }, 1200);
+    } catch (err: any) {
+      console.error("Transmission error:", err);
+      setErrorMessage(err.message || "Failed to connect to mainframe.");
+      setStatus("error");
+    }
   };
 
   return (
@@ -143,6 +164,22 @@ export default function ContactSection() {
               onSubmit={handleSubmit}
               style={{ display: "flex", flexDirection: "column", gap: "16px" }}
             >
+              {status === "error" && errorMessage && (
+                <div
+                  style={{
+                    background: "rgba(239, 68, 68, 0.1)",
+                    border: "1px solid rgba(239, 68, 68, 0.3)",
+                    color: "#ef4444",
+                    padding: "12px",
+                    fontSize: "0.85rem",
+                    textAlign: "center",
+                    fontFamily: "var(--font-mono)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Error: {errorMessage}
+                </div>
+              )}
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                 <label
                   style={{
