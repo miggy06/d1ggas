@@ -1,67 +1,14 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Send, Mail, MapPin, Sparkles } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from "framer-motion";
 
 export default function ContactSection() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<string | null>(null);
-
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const infoRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      // 1. Reveal section heading
-      gsap.from("#contact h2", {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none"
-        }
-      });
-
-      // 2. Slide/Fade in Left Info Column
-      gsap.from(infoRef.current, {
-        opacity: 0,
-        x: -40,
-        duration: 0.9,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none"
-        }
-      });
-
-      // 3. Slide/Fade in Right Form Column
-      gsap.from(formRef.current, {
-        opacity: 0,
-        x: 40,
-        duration: 0.9,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none"
-        }
-      });
-    }); // Omit sectionRef scope argument to resolve context lookup bug
-
-    return () => ctx.revert();
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,8 +24,16 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="section-container" ref={sectionRef} style={{ paddingBottom: "140px" }}>
-      <h2 className="section-title">Contact</h2>
+    <section id="contact" className="section-container" style={{ paddingBottom: "140px" }}>
+      <motion.h2
+        className="section-title"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        Contact
+      </motion.h2>
 
       <div
         style={{
@@ -89,7 +44,13 @@ export default function ContactSection() {
         }}
       >
         {/* Info Column */}
-        <div ref={infoRef} style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+          style={{ display: "flex", flexDirection: "column", gap: "28px" }}
+        >
           <div>
             <h3 style={{ fontSize: "1.3rem", fontWeight: 700, marginBottom: "12px" }}>
               Get In Touch
@@ -141,10 +102,15 @@ export default function ContactSection() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Form Column */}
-        <div ref={formRef}>
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+        >
           {status === "success" ? (
             <div
               style={{
@@ -260,7 +226,7 @@ export default function ContactSection() {
               </button>
             </form>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

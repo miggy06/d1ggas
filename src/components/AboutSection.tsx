@@ -1,70 +1,67 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./PortfolioLayout.module.css";
 import { crewMembers, CrewMember } from "../data/crew";
 
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+// Variants for staggering card elements cleanly on scroll
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
 
 export default function AboutSection() {
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      // 1. Reveal section heading and description
-      gsap.from("#about h2, #about p", {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none"
-        }
-      });
-
-      // 2. Staggered reveal for crew cards grid
-      gsap.from(`.${styles.crewCard}`, {
-        opacity: 0,
-        y: 40,
-        scale: 0.95,
-        duration: 0.8,
-        stagger: 0.08,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none"
-        }
-      });
-    }); // Omit sectionRef scope argument to resolve context lookup bug
-
-    return () => ctx.revert();
-  }, []);
 
   return (
-    <section id="about" className="section-container" ref={sectionRef}>
-      <h2 className="section-title">About Us</h2>
-      
-      <p style={{ color: "var(--text-secondary)", marginBottom: "40px", maxWidth: "600px" }}>
-        We are a group of 8 friends bound by shared experiences, jokes, and countless memories.
-        Select any profile to view our specialties, statistics, and roles within the crew.
-      </p>
+    <section id="about" className="section-container">
+      {/* Scroll-triggered reveal for Section heading */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <h2 className="section-title">About Us</h2>
+        
+        <p style={{ color: "var(--text-secondary)", marginBottom: "40px", maxWidth: "600px" }}>
+          We are a group of 8 friends bound by shared experiences, jokes, and countless memories.
+          Select any profile to view our specialties, statistics, and roles within the crew.
+        </p>
+      </motion.div>
 
-      {/* Grid of 8 Friends */}
-      <div className={styles.crewGrid}>
+      {/* Grid of 8 Friends - animated on entry */}
+      <motion.div 
+        className={styles.crewGrid}
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+      >
         {crewMembers.map((member) => (
-          <div
+          <motion.div
             key={member.id}
             className={styles.crewCard}
+            variants={cardVariants}
             onClick={() => setSelectedMember(member)}
           >
             <div
@@ -82,9 +79,9 @@ export default function AboutSection() {
             <p className={styles.cardBio}>
               {member.bio.substring(0, 70)}...
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Profile Detail overlay (drawer CV modal) */}
       <AnimatePresence>

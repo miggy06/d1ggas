@@ -1,75 +1,66 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, Variants } from "framer-motion";
 import Header from "../components/Header";
 import AboutSection from "../components/AboutSection";
 import AlbumSection from "../components/AlbumSection";
 import ContactSection from "../components/ContactSection";
 import styles from "../components/PortfolioLayout.module.css";
 
-// Register GSAP ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+const heroContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const heroItemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: "easeOut" },
+  },
+};
+
+const heroTitleVariants: Variants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1.0, ease: "easeOut" },
+  },
+};
+
+const heroButtonVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, type: "spring", stiffness: 100, damping: 12 },
+  },
+};
 
 export default function Home() {
-  const heroBgRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    // GSAP Context handles automatic cleanups in React
-    let ctx = gsap.context(() => {
-      // 1. Background Image Parallax & Fade-out on scroll
-      gsap.to(heroBgRef.current, {
-        opacity: 0,
-        y: 120, // smooth parallax offset
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        }
-      });
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+      const maxScroll = 500; // fade out over 500px
+      const progress = Math.min(scrollTop / maxScroll, 1);
+      setScrollProgress(progress);
+    };
 
-      // 2. Entrance Staggered reveals for Hero contents
-      const tl = gsap.timeline();
-      
-      tl.from(`.${styles.heroSubText}`, {
-        y: 20,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      })
-      .from(`.${styles.heroTitleMain}`, {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: "power4.out"
-      }, "-=0.6")
-      .from(`.${styles.heroDescription} p`, {
-        y: 20,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "power3.out"
-      }, "-=0.5")
-      .from(`.${styles.togglePill}`, {
-        scale: 0.9,
-        opacity: 0,
-        duration: 0.6,
-        ease: "back.out(1.5)"
-      }, "-=0.4");
-    });
-
-    // Refresh ScrollTrigger positions after page finishes rendering to avoid height calculation offsets
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 600);
-
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initial run
+    
     return () => {
-      ctx.revert();
-      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -93,6 +84,9 @@ export default function Home() {
     }
   };
 
+  const bgOpacity = 0.38 * (1 - scrollProgress);
+  const bgTranslateY = scrollProgress * 120; // 0px to 120px parallax
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--bg-primary)" }}>
       {/* Sticky Top Header Navigation */}
@@ -104,7 +98,14 @@ export default function Home() {
         {/* 1. Hero Section (Sapir Roche style) */}
         <section id="hero" className={styles.heroContainer}>
           {/* Subtle Background Image with Opacity */}
-          <div ref={heroBgRef} className={styles.heroBgImageWrapper}>
+          <div 
+            className={styles.heroBgImageWrapper}
+            style={{
+              opacity: bgOpacity,
+              transform: `translateY(${bgTranslateY}px) translateZ(0)`,
+              willChange: "opacity, transform",
+            }}
+          >
             <Image
               src="/assets/d1ggas_bg.png"
               alt="D1GGAS background lego and crew hands"
@@ -117,32 +118,37 @@ export default function Home() {
             <div className={styles.heroBgOverlay} />
           </div>
 
-          <div className={styles.heroContentWrapper}>
+          <motion.div 
+            className={styles.heroContentWrapper}
+            variants={heroContainerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             {/* Top row: Small meta details */}
-            <div className={styles.heroTopMeta}>
+            <motion.div className={styles.heroTopMeta} variants={heroItemVariants}>
               <span className={styles.heroSubText}>Est. 2023 // Crew Mainframe</span>
-            </div>
+            </motion.div>
 
             {/* Middle part: Giant title "D1GGAS" */}
-            <div className={styles.heroTitleContainer}>
+            <motion.div className={styles.heroTitleContainer} variants={heroTitleVariants}>
               <h1 className={styles.heroTitleMain}>D1GGAS</h1>
-            </div>
+            </motion.div>
 
             {/* Bottom row: Subtitle on left, "Work with Me" toggle style button on right */}
             <div className={styles.heroBottomRow}>
-              <div className={styles.heroDescription}>
+              <motion.div className={styles.heroDescription} variants={heroItemVariants}>
                 <p>Connected by chaos, defined by style.</p>
-                <p>A digital sanctuary for eight friends sharing memories and tracking progress.</p>
-              </div>
+                <p style={{ marginTop: "8px" }}>A digital sanctuary for eight friends sharing memories and tracking progress.</p>
+              </motion.div>
 
-              <div className={styles.heroToggleWrapper}>
+              <motion.div className={styles.heroToggleWrapper} variants={heroButtonVariants}>
                 <button className={styles.togglePill} onClick={scrollToContact}>
                   <span className={styles.toggleText}>Explore Crew</span>
                   <span className={styles.toggleCircle} />
                 </button>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </section>
 
         {/* 2. About Section (8 Profiles) */}

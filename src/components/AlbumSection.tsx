@@ -1,14 +1,10 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { Plus, Trash2 } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, Variants } from "framer-motion";
 import styles from "./Album.module.css";
-
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
 
 interface AlbumImage {
   id: string;
@@ -44,46 +40,31 @@ const defaultImages: AlbumImage[] = [
   },
 ];
 
+const gridVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut",
+    },
+  },
+};
+
 export default function AlbumSection() {
   const [images, setImages] = useState<AlbumImage[]>(defaultImages);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      // 1. Reveal section heading and description text
-      gsap.from("#album h2, #album p", {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none"
-        }
-      });
-
-      // 2. Staggered reveal for grid cards (upload card + photo cards)
-      const elements = gsap.utils.toArray(`.${styles.uploadCard}, .${styles.albumCard}`);
-      gsap.from(elements, {
-        opacity: 0,
-        y: 40,
-        scale: 0.96,
-        duration: 0.8,
-        stagger: 0.08,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none"
-        }
-      });
-    }); // Omit sectionRef scope argument to resolve context lookup bug
-
-    return () => ctx.revert();
-  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -111,16 +92,31 @@ export default function AlbumSection() {
   };
 
   return (
-    <section id="album" className="section-container" ref={sectionRef}>
-      <h2 className="section-title">Memory Album</h2>
+    <section id="album" className="section-container">
+      {/* Scroll-triggered reveal for Section heading and description */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <h2 className="section-title">Memory Album</h2>
 
-      <p style={{ color: "var(--text-secondary)", marginBottom: "40px", maxWidth: "600px" }}>
-        Cherish our shared history. Drag & drop or select images to upload your own files to the album grid below!
-      </p>
+        <p style={{ color: "var(--text-secondary)", marginBottom: "40px", maxWidth: "600px" }}>
+          Cherish our shared history. Drag & drop or select images to upload your own files to the album grid below!
+        </p>
+      </motion.div>
 
-      <div className={styles.albumGrid}>
+      {/* Grid of memory images */}
+      <motion.div
+        className={styles.albumGrid}
+        variants={gridVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+      >
         {/* Upload Trigger Card */}
-        <label className={styles.uploadCard}>
+        <motion.label className={styles.uploadCard} variants={itemVariants}>
           <input
             type="file"
             multiple
@@ -132,11 +128,11 @@ export default function AlbumSection() {
           <Plus size={32} className={styles.uploadIcon} />
           <span className={styles.uploadText}>Upload Memory</span>
           <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>JPEG / PNG / WebP</span>
-        </label>
+        </motion.label>
 
         {/* Existing Images */}
         {images.map((img) => (
-          <div key={img.id} className={styles.albumCard}>
+          <motion.div key={img.id} className={styles.albumCard} variants={itemVariants}>
             <Image
               src={img.src}
               alt={img.alt}
@@ -152,9 +148,9 @@ export default function AlbumSection() {
             >
               <Trash2 size={15} />
             </button>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
