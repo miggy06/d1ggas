@@ -142,7 +142,7 @@ export default function Home() {
               </motion.div>
 
               <motion.div className={styles.heroToggleWrapper} variants={heroButtonVariants}>
-                <button className={styles.togglePill} onClick={scrollToContact}>
+                <button className={styles.togglePill} onClick={scrollToAbout}>
                   <span className={styles.toggleText}>Explore Crew</span>
                   <span className={styles.toggleCircle} />
                 </button>
