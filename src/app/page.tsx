@@ -174,7 +174,7 @@ export default function Home() {
           transition: "background-color 0.3s ease, border-color 0.3s ease",
         }}
       >
-        <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+        <div className="footer-content">
           <span>&copy; {new Date().getFullYear()} d1ggas. All rights reserved.</span>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem" }}>
             CRAFTED WITH STYLE // SYSTEM ONLINE

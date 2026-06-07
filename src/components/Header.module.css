@@ -146,3 +146,30 @@
     display: none;
   }
 }
+
+@media (max-width: 400px) {
+  .headerContainer {
+    width: 98%;
+    padding: 4px;
+  }
+  
+  .logoBadge {
+    padding: 6px 10px;
+  }
+  
+  .logoText {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .navLink {
+    font-size: 0.7rem;
+    padding: 6px 6px;
+  }
+  
+  .themeToggle {
+    width: 26px;
+    height: 26px;
+    margin-left: 0px;
+  }
+}

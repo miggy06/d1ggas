@@ -212,9 +212,42 @@ h1, h2, h3, h4 {
   margin-top: 20px;
 }
 
+/* Footer Layout */
+.footer-content {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 @media (max-width: 768px) {
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 32px;
+  }
+  .section-container {
+    padding: 60px 20px;
+  }
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-container {
+    padding: 50px 16px;
   }
 }

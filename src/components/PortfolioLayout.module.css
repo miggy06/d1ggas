@@ -338,12 +338,13 @@
 @media (max-width: 900px) {
   .heroContainer {
     padding: 120px 40px 60px 40px;
-    min-height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
   
   .heroTitleMain {
-    font-size: 13.5vw;
-    letter-spacing: -2px;
+    font-size: clamp(4.5rem, 14vw, 8rem);
+    letter-spacing: -3px;
   }
   
   .heroBottomRow {
@@ -364,15 +365,21 @@
 @media (max-width: 500px) {
   .heroContainer {
     padding: 100px 24px 40px 24px;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .heroTitleMain {
-    font-size: 15vw;
-    letter-spacing: -1px;
+    font-size: clamp(3.2rem, 18vw, 5rem);
+    letter-spacing: -2px;
   }
 
   .crewGrid {
     grid-template-columns: 1fr;
+  }
+  
+  .drawer {
+    padding: 20px;
   }
   
   .drawerStatsGrid {

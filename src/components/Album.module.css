@@ -107,3 +107,10 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (hover: none), (max-width: 1024px) {
+  .deleteBtn {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
