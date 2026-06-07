@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Plus, Trash2, ChevronLeft, ChevronRight, Download, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Album.module.css";
+import Magnetic from "./Magnetic";
 
 interface AlbumImage {
   id: string;
@@ -314,6 +315,22 @@ export default function AlbumSection() {
 
       {/* Horizontal Loop Coverflow Carousel */}
       <div className={styles.carouselOuter}>
+        {/* Transparent Click Zones for Navigation (covers side cards) */}
+        {images.length > 1 && (
+          <>
+            <div 
+              className={styles.carouselClickZoneLeft} 
+              onClick={handlePrev} 
+              title="Previous Photo"
+            />
+            <div 
+              className={styles.carouselClickZoneRight} 
+              onClick={handleNext} 
+              title="Next Photo"
+            />
+          </>
+        )}
+
         {/* Navigation Buttons (Left) */}
         {images.length > 1 && (
           <button 
@@ -418,19 +435,21 @@ export default function AlbumSection() {
 
       {/* Upload memory Action Button */}
       <div className={styles.carouselActions}>
-        <label className={styles.uploadPill}>
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            className={styles.hiddenInput}
-            disabled={loading}
-          />
-          <Plus size={16} />
-          <span>{loading ? "Uploading..." : "Upload Memory"}</span>
-        </label>
+        <Magnetic range={50} action={0.25}>
+          <label className={styles.uploadPill}>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className={styles.hiddenInput}
+              disabled={loading}
+            />
+            <Plus size={16} />
+            <span>{loading ? "Uploading..." : "Upload Memory"}</span>
+          </label>
+        </Magnetic>
       </div>
 
       {/* Enlarged Image Lightbox Overlay */}

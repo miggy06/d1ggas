@@ -8,6 +8,7 @@ import AboutSection from "../components/AboutSection";
 import AlbumSection from "../components/AlbumSection";
 import ContactSection from "../components/ContactSection";
 import styles from "../components/PortfolioLayout.module.css";
+import Magnetic from "../components/Magnetic";
 
 const heroContainerVariants: Variants = {
   hidden: {},
@@ -47,6 +48,7 @@ const heroButtonVariants: Variants = {
 
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,11 +58,17 @@ export default function Home() {
       setScrollProgress(progress);
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     handleScroll(); // Initial run
     
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -88,12 +96,26 @@ export default function Home() {
   const bgTranslateY = scrollProgress * 120; // 0px to 120px parallax
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "var(--bg-primary)" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "var(--bg-primary)", position: "relative" }}>
       {/* Sticky Top Header Navigation */}
       <Header />
 
+      {/* Premium Ambient Background Glow Blobs */}
+      <div className="ambient-glow-container">
+        <motion.div 
+          className="glow-blob glow-interactive"
+          animate={{
+            x: mousePos.x - 200,
+            y: mousePos.y - 200,
+          }}
+          transition={{ type: "spring", damping: 45, stiffness: 100, mass: 0.6 }}
+        />
+        <div className="glow-blob glow-ambient-1" />
+        <div className="glow-blob glow-ambient-2" />
+      </div>
+
       {/* Main Single-Page Portfolio Layout */}
-      <main style={{ width: "100%", margin: "0 auto" }}>
+      <main style={{ width: "100%", margin: "0 auto", position: "relative", zIndex: 5 }}>
         
         {/* 1. Hero Section (Sapir Roche style) */}
         <section id="hero" className={styles.heroContainer}>
@@ -142,10 +164,12 @@ export default function Home() {
               </motion.div>
 
               <motion.div className={styles.heroToggleWrapper} variants={heroButtonVariants}>
-                <button className={styles.togglePill} onClick={scrollToAbout}>
-                  <span className={styles.toggleText}>Explore Crew</span>
-                  <span className={styles.toggleCircle} />
-                </button>
+                <Magnetic range={60} action={0.25}>
+                  <button className={styles.togglePill} onClick={scrollToAbout}>
+                    <span className={styles.toggleText}>Explore Crew</span>
+                    <span className={styles.toggleCircle} />
+                  </button>
+                </Magnetic>
               </motion.div>
             </div>
           </motion.div>

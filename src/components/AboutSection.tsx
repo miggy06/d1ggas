@@ -29,8 +29,41 @@ const cardVariants: Variants = {
   },
 };
 
+interface MemberStats {
+  vibe: number;
+  social: number;
+  logic: number;
+  humour: number;
+}
+
+const getMemberStats = (id: string): MemberStats => {
+  const statsMap: Record<string, MemberStats> = {
+    randelf: { vibe: 92, social: 75, logic: 96, humour: 88 },
+    paola: { vibe: 96, social: 92, logic: 65, humour: 90 },
+    krishanna: { vibe: 94, social: 88, logic: 70, humour: 95 },
+    francis: { vibe: 88, social: 80, logic: 92, humour: 85 },
+    rheanne: { vibe: 95, social: 86, logic: 72, humour: 90 },
+    ayeisha: { vibe: 90, social: 94, logic: 60, humour: 92 },
+    xian: { vibe: 86, social: 70, logic: 96, humour: 80 },
+    jeremy: { vibe: 91, social: 82, logic: 89, humour: 88 }
+  };
+  return statsMap[id] || { vibe: 85, social: 80, logic: 80, humour: 85 };
+};
+
 export default function AboutSection() {
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
+  const [activeTab, setActiveTab] = useState<"profile" | "interests" | "stats">("profile");
+
+  const handleOpenProfile = (member: CrewMember) => {
+    setActiveTab("profile");
+    setSelectedMember(member);
+  };
+
+  const tabs = [
+    { id: "profile", label: "Profile" },
+    { id: "interests", label: "Interests" },
+    { id: "stats", label: "Stats" }
+  ];
 
   return (
     <section id="about" className="section-container">
@@ -62,7 +95,7 @@ export default function AboutSection() {
             key={member.id}
             className={styles.crewCard}
             variants={cardVariants}
-            onClick={() => setSelectedMember(member)}
+            onClick={() => handleOpenProfile(member)}
           >
             <div
               className={styles.avatarInitials}
@@ -126,45 +159,183 @@ export default function AboutSection() {
                   <span className={styles.drawerSubtitle}>Personal Profile</span>
                 </div>
               </div>
- 
-              <div className={styles.profileDetailsList}>
-                <div className={styles.profileDetailItem}>
-                  <span className={styles.detailLabel}>Birthday</span>
-                  <span className={styles.detailValue}>{selectedMember.birthday}</span>
-                </div>
- 
-                <div className={styles.profileDetailItem}>
-                  <span className={styles.detailLabel}>Favorite Color</span>
-                  <span className={styles.detailValue}>{selectedMember.favColor}</span>
-                </div>
- 
-                <div className={styles.profileDetailItem}>
-                  <span className={styles.detailLabel}>Favorite Food</span>
-                  <span className={styles.detailValue}>{selectedMember.favFood}</span>
-                </div>
- 
-                <div className={styles.profileDetailItem}>
-                  <span className={styles.detailLabel}>Hobby</span>
-                  <span className={styles.detailValue}>{selectedMember.hobby}</span>
-                </div>
- 
-                <div className={styles.profileDetailItem}>
-                  <span className={styles.detailLabel}>Relationship Status</span>
-                  <span className={styles.detailValue}>{selectedMember.status}</span>
-                </div>
- 
-                <div className={styles.profileDetailItem}>
-                  <span className={styles.detailLabel}>Instagram / Contact</span>
-                  <span className={styles.detailValue} style={{ color: "var(--color-blue)", fontFamily: "var(--font-mono)" }}>
-                    {selectedMember.instagram}
-                  </span>
-                </div>
+
+              {/* Interactive Tabs Header */}
+              <div className={styles.drawerTabs}>
+                {tabs.map((t) => {
+                  const isActive = activeTab === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      className={`${styles.drawerTabBtn} ${isActive ? styles.drawerTabActive : ""}`}
+                      onClick={() => setActiveTab(t.id as any)}
+                    >
+                      <span>{t.label}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeTabUnderline"
+                          className={styles.activeTabUnderline}
+                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
+
+              {/* Tab Contents */}
+              <AnimatePresence mode="wait">
+                {activeTab === "profile" && (
+                  <motion.div
+                    key="profile"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className={styles.profileDetailsList}>
+                      <div className={styles.profileDetailItem}>
+                        <span className={styles.detailLabel}>Birthday</span>
+                        <span className={styles.detailValue}>{selectedMember.birthday}</span>
+                      </div>
  
-              <div className={styles.profileBioSection}>
-                <span className={styles.bioLabel}>About Me</span>
-                <p className={styles.bioText}>{selectedMember.bio}</p>
-              </div>
+                      <div className={styles.profileDetailItem}>
+                        <span className={styles.detailLabel}>Favorite Color</span>
+                        <span className={styles.detailValue}>{selectedMember.favColor}</span>
+                      </div>
+
+                      <div className={styles.profileDetailItem}>
+                        <span className={styles.detailLabel}>Relationship Status</span>
+                        <span className={styles.detailValue}>{selectedMember.status}</span>
+                      </div>
+ 
+                      <div className={styles.profileDetailItem}>
+                        <span className={styles.detailLabel}>Instagram / Contact</span>
+                        <span className={styles.detailValue} style={{ color: "var(--color-blue)", fontFamily: "var(--font-mono)" }}>
+                          {selectedMember.instagram}
+                        </span>
+                      </div>
+                    </div>
+ 
+                    <div className={styles.profileBioSection}>
+                      <span className={styles.bioLabel}>About Me</span>
+                      <p className={styles.bioText}>{selectedMember.bio}</p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeTab === "interests" && (
+                  <motion.div
+                    key="interests"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className={styles.profileDetailsList}>
+                      <div className={styles.profileDetailItem}>
+                        <span className={styles.detailLabel}>Favorite Food</span>
+                        <span className={styles.detailValue}>{selectedMember.favFood}</span>
+                      </div>
+ 
+                      <div className={styles.profileDetailItem}>
+                        <span className={styles.detailLabel}>Hobby</span>
+                        <span className={styles.detailValue}>{selectedMember.hobby}</span>
+                      </div>
+                    </div>
+
+                    <div className={styles.profileBioSection}>
+                      <span className={styles.bioLabel}>Crew Vibe</span>
+                      <p className={styles.bioText}>
+                        When not busy with hobbies like {selectedMember.hobby || "hanging out"}, {selectedMember.name} helps shape the culture and layout of the d1ggas crew.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeTab === "stats" && (
+                  <motion.div
+                    key="stats"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className={styles.drawerStatsGrid} style={{ marginTop: "16px", marginBottom: "20px" }}>
+                      <div className={styles.statItem}>
+                        <div className={styles.statHeader}>
+                          <span>Vibe Level</span>
+                          <span>{getMemberStats(selectedMember.id).vibe}%</span>
+                        </div>
+                        <div className={styles.statBarBg}>
+                          <motion.div
+                            className={styles.statBarFill}
+                            style={{ backgroundColor: selectedMember.color }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${getMemberStats(selectedMember.id).vibe}%` }}
+                            transition={{ duration: 0.7, ease: "easeOut" }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className={styles.statItem}>
+                        <div className={styles.statHeader}>
+                          <span>Social Power</span>
+                          <span>{getMemberStats(selectedMember.id).social}%</span>
+                        </div>
+                        <div className={styles.statBarBg}>
+                          <motion.div
+                            className={styles.statBarFill}
+                            style={{ backgroundColor: selectedMember.color }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${getMemberStats(selectedMember.id).social}%` }}
+                            transition={{ duration: 0.7, ease: "easeOut", delay: 0.08 }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className={styles.statItem}>
+                        <div className={styles.statHeader}>
+                          <span>Coding & Logic</span>
+                          <span>{getMemberStats(selectedMember.id).logic}%</span>
+                        </div>
+                        <div className={styles.statBarBg}>
+                          <motion.div
+                            className={styles.statBarFill}
+                            style={{ backgroundColor: selectedMember.color }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${getMemberStats(selectedMember.id).logic}%` }}
+                            transition={{ duration: 0.7, ease: "easeOut", delay: 0.16 }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className={styles.statItem}>
+                        <div className={styles.statHeader}>
+                          <span>Humour & Jokes</span>
+                          <span>{getMemberStats(selectedMember.id).humour}%</span>
+                        </div>
+                        <div className={styles.statBarBg}>
+                          <motion.div
+                            className={styles.statBarFill}
+                            style={{ backgroundColor: selectedMember.color }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${getMemberStats(selectedMember.id).humour}%` }}
+                            transition={{ duration: 0.7, ease: "easeOut", delay: 0.24 }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className={styles.profileBioSection}>
+                      <span className={styles.bioLabel}>Sanctuary Telemetry</span>
+                      <p className={styles.bioText}>
+                        These indexes are computed based on crew activity, chat engagement rates, and custom vibe telemetry metrics in our sanctuary databases.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </motion.div>
         )}
