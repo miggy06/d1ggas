@@ -113,6 +113,7 @@
 @media (max-width: 600px) {
   .headerContainer {
     width: 95%;
+    max-width: calc(100% - 20px);
     height: 52px;
     padding: 4px 6px 4px 6px;
   }
