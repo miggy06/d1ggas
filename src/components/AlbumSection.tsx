@@ -467,6 +467,22 @@ export default function AlbumSection() {
               </button>
             </div>
 
+            {/* Left/Right Click zones for easy mobile tapping / swipe navigation */}
+            {images.length > 1 && (
+              <>
+                <div 
+                  className={styles.lightboxClickZoneLeft} 
+                  onClick={handleLightboxPrev} 
+                  title="Previous Photo"
+                />
+                <div 
+                  className={styles.lightboxClickZoneRight} 
+                  onClick={handleLightboxNext} 
+                  title="Next Photo"
+                />
+              </>
+            )}
+
             {/* Lightbox Navigation (Left) */}
             {images.length > 1 && (
               <button 
@@ -474,7 +490,7 @@ export default function AlbumSection() {
                 onClick={handleLightboxPrev}
                 aria-label="Previous image"
               >
-                <ChevronLeft size={22} />
+                <ChevronLeft size={20} />
               </button>
             )}
 
@@ -485,7 +501,7 @@ export default function AlbumSection() {
                 onClick={handleLightboxNext}
                 aria-label="Next image"
               >
-                <ChevronRight size={22} />
+                <ChevronRight size={20} />
               </button>
             )}
 

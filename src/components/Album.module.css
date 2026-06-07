@@ -112,6 +112,8 @@
   z-index: 30;
   transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .navBtn:hover {
@@ -317,11 +319,74 @@
   position: relative !important;
 }
 
-.lightboxCaption {
-  margin-top: 24px;
-  font-family: var(--font-sans);
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.9rem;
-  text-align: center;
-  max-width: 600px;
+/* Lightbox Modern Circular Navigation */
+.lightboxNavBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 520;
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.lightboxNavBtn:hover {
+  background: var(--color-blue);
+  color: #ffffff;
+  border-color: var(--color-blue);
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 8px 25px rgba(17, 109, 255, 0.35);
+}
+
+.lightboxLeftBtn {
+  left: 4vw;
+}
+
+.lightboxRightBtn {
+  right: 4vw;
+}
+
+@media (max-width: 600px) {
+  .lightboxNavBtn {
+    width: 42px;
+    height: 42px;
+  }
+  .lightboxLeftBtn {
+    left: 2vw;
+  }
+  .lightboxRightBtn {
+    right: 2vw;
+  }
+}
+
+/* Transparent Tapping Zones for Navigation */
+.lightboxClickZoneLeft {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  z-index: 505;
+  cursor: w-resize;
+}
+
+.lightboxClickZoneRight {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  z-index: 505;
+  cursor: e-resize;
 }
