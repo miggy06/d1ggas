@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Trash2, ChevronLeft, ChevronRight, Download, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Album.module.css";
 
@@ -111,6 +111,7 @@ export default function AlbumSection() {
   const [images, setImages] = useState<AlbumImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [enlargedImage, setEnlargedImage] = useState<AlbumImage | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load photos on mount from Vercel Blob cloud bucket
@@ -223,7 +224,6 @@ export default function AlbumSection() {
   };
 
   const handleDeleteImage = async (id: string) => {
-    // Determine the next index after deletion to prevent jumpiness
     const targetIdx = images.findIndex((img) => img.id === id);
     setImages((prev) => prev.filter((img) => img.id !== id));
 
@@ -257,6 +257,25 @@ export default function AlbumSection() {
     }
   };
 
+  // Triggers browser download directly from URL
+  const handleDownloadImage = async (src: string, filename: string) => {
+    try {
+      const response = await fetch(src);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename || "d1ggas-memory.jpg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      // CORS fallback: opens image in new tab if download block occurs
+      window.open(src, "_blank");
+    }
+  };
+
   return (
     <section id="album" className="section-container" style={{ overflow: "visible" }}>
       {/* Scroll-triggered reveal for Section heading and description */}
@@ -269,11 +288,11 @@ export default function AlbumSection() {
         <h2 className="section-title">Memory Album</h2>
 
         <p style={{ color: "var(--text-secondary)", marginBottom: "30px", maxWidth: "600px" }}>
-          Cherish our shared history. Tap to focus and swipe or use the buttons below to scroll through our memory album.
+          Tap once to focus a picture, and tap again to enlarge. Use navigation buttons to scroll infinitely.
         </p>
       </motion.div>
 
-      {/* Horizontal Carousel (Coverflow effect) */}
+      {/* Horizontal Loop Coverflow Carousel */}
       <div className={styles.carouselOuter}>
         {/* Navigation Buttons (Left) */}
         {images.length > 1 && (
@@ -297,20 +316,43 @@ export default function AlbumSection() {
           </button>
         )}
 
-        <motion.div
-          className={styles.carouselTrack}
-          animate={{
-            x: `calc(50vw - (var(--card-width) / 2) - (${activeIndex} * (var(--card-width) + var(--card-gap))))`
-          }}
-          transition={{ type: "spring", stiffness: 150, damping: 20 }}
-        >
+        <div className={styles.carouselTrack}>
           {images.map((img, index) => {
-            const isActive = index === activeIndex;
+            const N = images.length;
+            // Calculate shortest circular difference for infinite loop illusion
+            let diff = index - activeIndex;
+            if (diff < -N / 2) diff += N;
+            if (diff > N / 2) diff -= N;
+
+            const absDiff = Math.abs(diff);
+            const isActive = diff === 0;
+            const isVisible = absDiff <= 2; // Render center, inner neighbors, and outer neighbors
+
+            if (!isVisible) return null;
+
+            // Coverflow Style Parameters
+            const scale = isActive ? 1.06 : 0.88;
+            const zIndex = 10 - absDiff;
+            const blur = isActive ? "blur(0px)" : "blur(1.5px)";
+            const opacity = isActive ? 1 : (absDiff === 1 ? 0.48 : 0.15);
+            const shadow = isActive 
+              ? "0 30px 60px rgba(0, 0, 0, 0.35)" 
+              : "0 12px 30px rgba(0, 0, 0, 0.15)";
+            const pointerEvents = absDiff <= 1 ? "auto" : "none";
+
             return (
               <div
                 key={img.id}
                 className={`${styles.albumCard} ${isActive ? styles.activeCard : styles.sideCard}`}
-                onClick={() => setActiveIndex(index)}
+                style={{
+                  transform: `translate(calc(-50% + (${diff} * (var(--card-width) + var(--card-gap)))), -50%) scale(${scale})`,
+                  opacity,
+                  zIndex,
+                  filter: blur,
+                  boxShadow: shadow,
+                  pointerEvents,
+                }}
+                onClick={() => isActive ? setEnlargedImage(img) : setActiveIndex(index)}
               >
                 <Image
                   src={img.src}
@@ -321,12 +363,12 @@ export default function AlbumSection() {
                   priority={index < 3}
                 />
                 
-                {/* Delete Button on Active focused image */}
+                {/* Delete Button on Active centered card */}
                 {isActive && (
                   <button
                     className={styles.deleteBtn}
                     onClick={(e) => {
-                      e.stopPropagation(); // Avoid triggering card refocus click
+                      e.stopPropagation(); // Avoid triggering card enlarge click
                       handleDeleteImage(img.id);
                     }}
                     title="Delete Photo"
@@ -337,7 +379,7 @@ export default function AlbumSection() {
               </div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
 
       {/* Dot Indicators */}
@@ -370,6 +412,59 @@ export default function AlbumSection() {
           <span>{loading ? "Uploading..." : "Upload Memory"}</span>
         </label>
       </div>
+
+      {/* Enlarged Image Lightbox Overlay */}
+      <AnimatePresence>
+        {enlargedImage && (
+          <motion.div
+            className={styles.lightboxOverlay}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setEnlargedImage(null)}
+          >
+            {/* Header Controls */}
+            <div className={styles.lightboxHeader}>
+              {/* Download Button */}
+              <button
+                className={styles.lightboxBtn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDownloadImage(enlargedImage.src, enlargedImage.alt);
+                }}
+                title="Download Photo"
+              >
+                <Download size={18} />
+              </button>
+              
+              {/* Close Button */}
+              <button
+                className={styles.lightboxBtn}
+                onClick={() => setEnlargedImage(null)}
+                title="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Enlarged Image */}
+            <div className={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
+              <Image
+                src={enlargedImage.src}
+                alt={enlargedImage.alt}
+                fill
+                priority
+                className={styles.lightboxImg}
+              />
+            </div>
+
+            {/* Optional Caption */}
+            <div className={styles.lightboxCaption}>
+              {enlargedImage.alt.replace(/[-_]/g, " ").replace(/\.[^/.]+$/, "")}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
