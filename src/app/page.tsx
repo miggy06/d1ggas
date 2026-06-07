@@ -176,9 +176,6 @@ export default function Home() {
       >
         <div className="footer-content">
           <span>&copy; {new Date().getFullYear()} d1ggas. All rights reserved.</span>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem" }}>
-            CRAFTED WITH STYLE // SYSTEM ONLINE
-          </span>
         </div>
       </footer>
     </div>

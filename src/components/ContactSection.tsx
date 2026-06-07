@@ -70,8 +70,7 @@ export default function ContactSection() {
               Get In Touch
             </h3>
             <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
-              Have questions, collaboration ideas, or want to send telemetry to the d1ggas crew?
-              Drop us a message, and our automated queue will handle the transmission.
+              yieee, atik-atik chatti na dayun mi, gusto gud na siya mu chat gud, di man mi ma maak mu reply lagi mi sa inyoha
             </p>
           </div>
 
@@ -112,7 +111,7 @@ export default function ContactSection() {
               </div>
               <div>
                 <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontFamily: "var(--font-mono)", textTransform: "uppercase" }}>Location</div>
-                <div style={{ fontSize: "0.9rem", fontWeight: 600 }}>Manila, Philippines</div>
+                <div style={{ fontSize: "0.9rem", fontWeight: 600 }}>Davao, Philippines</div>
               </div>
             </div>
           </div>
@@ -232,7 +231,7 @@ export default function ContactSection() {
                 <textarea
                   required
                   rows={4}
-                  placeholder="Write your message here..."
+                  placeholder="ang kyut niyo naman"
                   className="form-input"
                   style={{ resize: "none" }}
                   value={message}
