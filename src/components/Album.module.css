@@ -1,21 +1,61 @@
-.albumGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+:root {
+  --card-width: 480px;
+  --card-height: 320px;
+  --card-gap: -40px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --card-width: 380px;
+    --card-height: 260px;
+    --card-gap: -30px;
+  }
+}
+
+@media (max-width: 500px) {
+  :root {
+    --card-width: 270px;
+    --card-height: 190px;
+    --card-gap: -20px;
+  }
+}
+
+.carouselOuter {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  padding: 60px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: background-color 0.3s ease;
+}
+
+.carouselTrack {
+  display: flex;
+  align-items: center;
+  gap: var(--card-gap);
+  width: max-content;
+  will-change: transform;
 }
 
 .albumCard {
+  width: var(--card-width);
+  height: var(--card-height);
+  flex-shrink: 0;
   position: relative;
-  height: 280px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.albumCard:hover {
-  transform: scale(1.02);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              filter 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  border-radius: 4px;
 }
 
 .albumImage {
@@ -23,55 +63,160 @@
   transition: transform 0.5s ease;
 }
 
-.albumCard:hover .albumImage {
-  transform: scale(1.04);
+.activeCard {
+  transform: scale(1.06);
+  opacity: 1;
+  z-index: 10;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  filter: blur(0);
 }
 
-/* Upload Card Styles */
-.uploadCard {
-  height: 280px;
-  border: 2px dashed var(--border-color);
-  background: var(--bg-card);
+.activeCard:hover .albumImage {
+  transform: scale(1.03);
+}
+
+.sideCard {
+  transform: scale(0.88);
+  opacity: 0.45;
+  z-index: 1;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  filter: blur(1.5px);
+  cursor: pointer;
+}
+
+.sideCard:hover {
+  opacity: 0.65;
+  filter: blur(0.5px);
+}
+
+/* Navigation Buttons */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--header-bg);
+  border: 1px solid var(--header-border);
+  color: var(--text-primary);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
   cursor: pointer;
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
+  z-index: 30;
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-.uploadCard:hover {
+.navBtn:hover {
+  background: var(--color-blue);
+  color: #ffffff;
   border-color: var(--color-blue);
-  color: var(--color-blue);
-  background: rgba(17, 109, 255, 0.01);
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 8px 20px rgba(17, 109, 255, 0.25);
 }
 
-.uploadIcon {
-  stroke-width: 1.5;
+.leftBtn {
+  left: 5vw;
 }
 
-.uploadText {
+@media (min-width: 1440px) {
+  .leftBtn {
+    left: calc(50vw - 650px);
+  }
+}
+
+.rightBtn {
+  right: 5vw;
+}
+
+@media (min-width: 1440px) {
+  .rightBtn {
+    right: calc(50vw - 650px);
+  }
+}
+
+/* Dots Indicators */
+.dotIndicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 24px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-color);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s ease;
+}
+
+.dot:hover {
+  background: var(--border-hover);
+}
+
+.activeDot {
+  background: var(--color-blue);
+  transform: scale(1.2);
+  width: 20px;
+  border-radius: 4px;
+}
+
+/* Upload Action Button */
+.carouselActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.uploadPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-family: var(--font-sans);
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.uploadPill:hover {
+  border-color: var(--color-blue);
+  color: var(--color-blue);
+  background: rgba(17, 109, 255, 0.02);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(17, 109, 255, 0.06);
 }
 
 .hiddenInput {
   display: none;
 }
 
-/* Delete Button on Hover */
+/* Delete Button */
 .deleteBtn {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(255, 255, 255, 0.9);
+  top: 16px;
+  right: 16px;
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -81,10 +226,11 @@
   opacity: 0;
   transform: scale(0.8);
   transition: all 0.2s ease;
-  z-index: 10;
+  z-index: 20;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.albumCard:hover .deleteBtn {
+.activeCard:hover .deleteBtn {
   opacity: 1;
   transform: scale(1);
 }
@@ -95,21 +241,8 @@
   border-color: #ef4444;
 }
 
-/* Responsive breakpoint */
-@media (max-width: 800px) {
-  .albumGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 500px) {
-  .albumGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (hover: none), (max-width: 1024px) {
-  .deleteBtn {
+  .activeCard .deleteBtn {
     opacity: 1;
     transform: scale(1);
   }

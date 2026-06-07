@@ -2,8 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { Plus, Trash2 } from "lucide-react";
-import { motion, Variants } from "framer-motion";
+import { Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Album.module.css";
 
 interface AlbumImage {
@@ -107,31 +107,10 @@ const saveToLocalStorage = (key: string, data: any) => {
   }
 };
 
-const gridVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 40, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-};
-
 export default function AlbumSection() {
   const [images, setImages] = useState<AlbumImage[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load photos on mount from Vercel Blob cloud bucket
@@ -168,6 +147,21 @@ export default function AlbumSection() {
 
     fetchImages();
   }, []);
+
+  // Ensure activeIndex is always valid if images are deleted or loaded
+  useEffect(() => {
+    if (images.length > 0 && activeIndex >= images.length) {
+      setActiveIndex(images.length - 1);
+    }
+  }, [images, activeIndex]);
+
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+  };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -218,6 +212,8 @@ export default function AlbumSection() {
 
         return [...updatedCustom, ...activeDefaults];
       });
+      // Center on the first newly uploaded image
+      setActiveIndex(0);
     }
 
     setLoading(false);
@@ -227,8 +223,13 @@ export default function AlbumSection() {
   };
 
   const handleDeleteImage = async (id: string) => {
-    // Optimistically update the UI
+    // Determine the next index after deletion to prevent jumpiness
+    const targetIdx = images.findIndex((img) => img.id === id);
     setImages((prev) => prev.filter((img) => img.id !== id));
+
+    if (targetIdx === activeIndex) {
+      setActiveIndex((prev) => Math.max(0, prev - 1));
+    }
 
     if (id.startsWith("https://")) {
       // Cloud image: dispatch DELETE request to API route
@@ -257,7 +258,7 @@ export default function AlbumSection() {
   };
 
   return (
-    <section id="album" className="section-container">
+    <section id="album" className="section-container" style={{ overflow: "visible" }}>
       {/* Scroll-triggered reveal for Section heading and description */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -267,21 +268,95 @@ export default function AlbumSection() {
       >
         <h2 className="section-title">Memory Album</h2>
 
-        <p style={{ color: "var(--text-secondary)", marginBottom: "40px", maxWidth: "600px" }}>
-          Cherish our shared history. Drag & drop or select images to upload your own files to the album grid below!
+        <p style={{ color: "var(--text-secondary)", marginBottom: "30px", maxWidth: "600px" }}>
+          Cherish our shared history. Tap to focus and swipe or use the buttons below to scroll through our memory album.
         </p>
       </motion.div>
 
-      {/* Grid of memory images */}
-      <motion.div
-        className={styles.albumGrid}
-        variants={gridVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-      >
-        {/* Upload Trigger Card */}
-        <motion.label className={styles.uploadCard} variants={itemVariants}>
+      {/* Horizontal Carousel (Coverflow effect) */}
+      <div className={styles.carouselOuter}>
+        {/* Navigation Buttons (Left) */}
+        {images.length > 1 && (
+          <button 
+            className={`${styles.navBtn} ${styles.leftBtn}`} 
+            onClick={handlePrev} 
+            aria-label="Previous image"
+          >
+            <ChevronLeft size={20} />
+          </button>
+        )}
+
+        {/* Navigation Buttons (Right) */}
+        {images.length > 1 && (
+          <button 
+            className={`${styles.navBtn} ${styles.rightBtn}`} 
+            onClick={handleNext} 
+            aria-label="Next image"
+          >
+            <ChevronRight size={20} />
+          </button>
+        )}
+
+        <motion.div
+          className={styles.carouselTrack}
+          animate={{
+            x: `calc(50vw - (var(--card-width) / 2) - (${activeIndex} * (var(--card-width) + var(--card-gap))))`
+          }}
+          transition={{ type: "spring", stiffness: 150, damping: 20 }}
+        >
+          {images.map((img, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <div
+                key={img.id}
+                className={`${styles.albumCard} ${isActive ? styles.activeCard : styles.sideCard}`}
+                onClick={() => setActiveIndex(index)}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className={styles.albumImage}
+                  priority={index < 3}
+                />
+                
+                {/* Delete Button on Active focused image */}
+                {isActive && (
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Avoid triggering card refocus click
+                      handleDeleteImage(img.id);
+                    }}
+                    title="Delete Photo"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </motion.div>
+      </div>
+
+      {/* Dot Indicators */}
+      {images.length > 1 && (
+        <div className={styles.dotIndicators}>
+          {images.map((_, idx) => (
+            <button
+              key={idx}
+              className={`${styles.dot} ${idx === activeIndex ? styles.activeDot : ""}`}
+              onClick={() => setActiveIndex(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Upload memory Action Button */}
+      <div className={styles.carouselActions}>
+        <label className={styles.uploadPill}>
           <input
             type="file"
             multiple
@@ -291,34 +366,10 @@ export default function AlbumSection() {
             className={styles.hiddenInput}
             disabled={loading}
           />
-          <Plus size={32} className={styles.uploadIcon} />
-          <span className={styles.uploadText}>
-            {loading ? "Uploading..." : "Upload Memory"}
-          </span>
-          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>JPEG / PNG / WebP</span>
-        </motion.label>
-
-        {/* Existing Images */}
-        {images.map((img) => (
-          <motion.div key={img.id} className={styles.albumCard} variants={itemVariants}>
-            <Image
-              src={img.src}
-              alt={img.alt}
-              fill
-              sizes="(max-width: 768px) 100vw, 33vw"
-              className={styles.albumImage}
-            />
-            {/* Hover Delete Action */}
-            <button
-              className={styles.deleteBtn}
-              onClick={() => handleDeleteImage(img.id)}
-              title="Delete Photo"
-            >
-              <Trash2 size={15} />
-            </button>
-          </motion.div>
-        ))}
-      </motion.div>
+          <Plus size={16} />
+          <span>{loading ? "Uploading..." : "Upload Memory"}</span>
+        </label>
+      </div>
     </section>
   );
 }
