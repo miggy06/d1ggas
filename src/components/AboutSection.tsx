@@ -74,15 +74,15 @@ export default function AboutSection() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
               <span className={styles.cardName}>{member.name}</span>
-              <span className={styles.cardRole}>{member.role.split(" // ")[0]}</span>
+              <span className={styles.cardRole}>View Profile</span>
             </div>
             <p className={styles.cardBio}>
-              {member.bio.substring(0, 70)}...
+              Click to view birthday, favorite color, hobbies, and social contacts.
             </p>
           </motion.div>
         ))}
       </motion.div>
-
+ 
       {/* Profile Detail overlay (drawer CV modal) */}
       <AnimatePresence>
         {selectedMember && (
@@ -108,54 +108,62 @@ export default function AboutSection() {
               >
                 <X size={16} />
               </button>
-
+ 
               <div className={styles.drawerHeader}>
                 <div
                   className={styles.avatarInitials}
                   style={{
                     background: selectedMember.gradient,
-                    width: "50px",
-                    height: "50px",
-                    fontSize: "1.1rem",
+                    width: "60px",
+                    height: "60px",
+                    fontSize: "1.3rem",
                   }}
                 >
                   {selectedMember.initials}
                 </div>
                 <div className={styles.drawerMeta}>
                   <h3 className={styles.drawerName}>{selectedMember.name}</h3>
-                  <span className={styles.drawerRole}>{selectedMember.role}</span>
+                  <span className={styles.drawerSubtitle}>Personal Profile</span>
                 </div>
               </div>
-
-              <blockquote className={styles.drawerQuote}>
-                &ldquo;{selectedMember.quote}&rdquo;
-              </blockquote>
-
-              <p className={styles.drawerBio}>{selectedMember.bio}</p>
-
-              <div className={styles.drawerSpecialty}>
-                <span className={styles.drawerSpecialtyLabel}>Core Specialty</span>
-                <p className={styles.drawerSpecialtyVal}>{selectedMember.specialty}</p>
+ 
+              <div className={styles.profileDetailsList}>
+                <div className={styles.profileDetailItem}>
+                  <span className={styles.detailLabel}>Birthday</span>
+                  <span className={styles.detailValue}>{selectedMember.birthday}</span>
+                </div>
+ 
+                <div className={styles.profileDetailItem}>
+                  <span className={styles.detailLabel}>Favorite Color</span>
+                  <span className={styles.detailValue}>{selectedMember.favColor}</span>
+                </div>
+ 
+                <div className={styles.profileDetailItem}>
+                  <span className={styles.detailLabel}>Favorite Food</span>
+                  <span className={styles.detailValue}>{selectedMember.favFood}</span>
+                </div>
+ 
+                <div className={styles.profileDetailItem}>
+                  <span className={styles.detailLabel}>Hobby</span>
+                  <span className={styles.detailValue}>{selectedMember.hobby}</span>
+                </div>
+ 
+                <div className={styles.profileDetailItem}>
+                  <span className={styles.detailLabel}>Relationship Status</span>
+                  <span className={styles.detailValue}>{selectedMember.status}</span>
+                </div>
+ 
+                <div className={styles.profileDetailItem}>
+                  <span className={styles.detailLabel}>Instagram / Contact</span>
+                  <span className={styles.detailValue} style={{ color: "var(--color-blue)", fontFamily: "var(--font-mono)" }}>
+                    {selectedMember.instagram}
+                  </span>
+                </div>
               </div>
-
-              {/* Stats / Telemetry Progress Bars */}
-              <div className={styles.drawerStatsGrid}>
-                {selectedMember.stats.map((stat, idx) => (
-                  <div key={idx} className={styles.statItem}>
-                    <div className={styles.statHeader}>
-                      <span>{stat.label}</span>
-                      <span>{stat.value}%</span>
-                    </div>
-                    <div className={styles.statBarBg}>
-                      <motion.div
-                        className={styles.statBarFill}
-                        initial={{ width: 0 }}
-                        animate={{ width: `${stat.value}%` }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                      />
-                    </div>
-                  </div>
-                ))}
+ 
+              <div className={styles.profileBioSection}>
+                <span className={styles.bioLabel}>About Me</span>
+                <p className={styles.bioText}>{selectedMember.bio}</p>
               </div>
             </motion.div>
           </motion.div>
