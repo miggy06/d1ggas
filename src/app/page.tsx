@@ -48,7 +48,6 @@ const heroButtonVariants: Variants = {
 
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,17 +57,11 @@ export default function Home() {
       setScrollProgress(progress);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     handleScroll(); // Initial run
     
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -99,20 +92,6 @@ export default function Home() {
     <div style={{ minHeight: "100vh", backgroundColor: "var(--bg-primary)", position: "relative" }}>
       {/* Sticky Top Header Navigation */}
       <Header />
-
-      {/* Premium Ambient Background Glow Blobs */}
-      <div className="ambient-glow-container">
-        <motion.div 
-          className="glow-blob glow-interactive"
-          animate={{
-            x: mousePos.x - 200,
-            y: mousePos.y - 200,
-          }}
-          transition={{ type: "spring", damping: 45, stiffness: 100, mass: 0.6 }}
-        />
-        <div className="glow-blob glow-ambient-1" />
-        <div className="glow-blob glow-ambient-2" />
-      </div>
 
       {/* Main Single-Page Portfolio Layout */}
       <main style={{ width: "100%", margin: "0 auto", position: "relative", zIndex: 5 }}>

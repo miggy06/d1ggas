@@ -372,9 +372,6 @@ export default function AlbumSection() {
             const zIndex = 10 - absDiff;
             const blur = isActive ? "blur(0px)" : "blur(1.5px)";
             const opacity = isActive ? 1 : (absDiff === 1 ? 0.48 : 0.15);
-            const shadow = isActive 
-              ? "0 30px 60px rgba(0, 0, 0, 0.35)" 
-              : "0 12px 30px rgba(0, 0, 0, 0.15)";
             const pointerEvents = absDiff <= 1 ? "auto" : "none";
 
             return (
@@ -386,7 +383,6 @@ export default function AlbumSection() {
                   opacity,
                   zIndex,
                   filter: blur,
-                  boxShadow: shadow,
                   pointerEvents,
                 }}
                 onClick={() => isActive ? setEnlargedImage(img) : setActiveIndex(index)}

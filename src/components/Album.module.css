@@ -73,7 +73,7 @@
 
 .activeCard {
   z-index: 25;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-active-card);
   filter: blur(0);
   cursor: zoom-in;
 }
@@ -84,7 +84,7 @@
 
 .sideCard {
   z-index: 1;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-side-card);
   filter: blur(1.5px);
   cursor: pointer;
 }
