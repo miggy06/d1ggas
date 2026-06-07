@@ -209,6 +209,8 @@
 .drawer {
   width: 100%;
   max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: var(--bg-card);
   color: var(--text-primary);
   border: 1.5px solid var(--border-color);

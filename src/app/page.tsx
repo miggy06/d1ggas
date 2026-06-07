@@ -126,7 +126,7 @@ export default function Home() {
           >
             {/* Top row: Small meta details */}
             <motion.div className={styles.heroTopMeta} variants={heroItemVariants}>
-              <span className={styles.heroSubText}>Est. 2023 // Crew Mainframe</span>
+              <span className={styles.heroSubText}>Est. 2024</span>
             </motion.div>
 
             {/* Middle part: Giant title "D1GGAS" */}

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "d1ggas // Crew Mainframe",
+  title: "d1ggas",
   description: "A digital sanctuary for eight friends. Connected by chaos, defined by style.",
 };
 

@@ -56,14 +56,7 @@ export default function ContactSection() {
         Contact
       </motion.h2>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1.2fr",
-          gap: "48px",
-          marginTop: "20px",
-        }}
-      >
+      <div className="contact-grid">
         {/* Info Column */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
