@@ -164,6 +164,26 @@ export default function AlbumSection() {
     setActiveIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
   };
 
+  const currentEnlargedIndex = enlargedImage 
+    ? images.findIndex((img) => img.id === enlargedImage.id) 
+    : -1;
+
+  const handleLightboxPrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (currentEnlargedIndex === -1) return;
+    const prevIdx = currentEnlargedIndex > 0 ? currentEnlargedIndex - 1 : images.length - 1;
+    setEnlargedImage(images[prevIdx]);
+    setActiveIndex(prevIdx);
+  };
+
+  const handleLightboxNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (currentEnlargedIndex === -1) return;
+    const nextIdx = currentEnlargedIndex < images.length - 1 ? currentEnlargedIndex + 1 : 0;
+    setEnlargedImage(images[nextIdx]);
+    setActiveIndex(nextIdx);
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -447,6 +467,28 @@ export default function AlbumSection() {
               </button>
             </div>
 
+            {/* Lightbox Navigation (Left) */}
+            {images.length > 1 && (
+              <button 
+                className={`${styles.lightboxNavBtn} ${styles.lightboxLeftBtn}`} 
+                onClick={handleLightboxPrev}
+                aria-label="Previous image"
+              >
+                <ChevronLeft size={22} />
+              </button>
+            )}
+
+            {/* Lightbox Navigation (Right) */}
+            {images.length > 1 && (
+              <button 
+                className={`${styles.lightboxNavBtn} ${styles.lightboxRightBtn}`} 
+                onClick={handleLightboxNext}
+                aria-label="Next image"
+              >
+                <ChevronRight size={22} />
+              </button>
+            )}
+
             {/* Enlarged Image */}
             <div className={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
               <Image
@@ -456,11 +498,6 @@ export default function AlbumSection() {
                 priority
                 className={styles.lightboxImg}
               />
-            </div>
-
-            {/* Optional Caption */}
-            <div className={styles.lightboxCaption}>
-              {enlargedImage.alt.replace(/[-_]/g, " ").replace(/\.[^/.]+$/, "")}
             </div>
           </motion.div>
         )}
