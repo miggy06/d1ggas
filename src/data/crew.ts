@@ -58,7 +58,7 @@ export const crewMembers: CrewMember[] = [
     status: "[Insert Relationship Status]",
     instagram: "https://www.instagram.com/_shakiiz?igsh=ZXBobDk3MHhwaDZs&utm_source=qr",
     bio: "kulot, pinaka cute sa kalibutan",
-    image: "/assets/profiles/krishanna.png"
+    image: "/assets/profiles/krishanna.jpg"
   },
   {
     id: "francis",
