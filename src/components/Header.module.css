@@ -173,4 +173,42 @@
     height: 26px;
     margin-left: 0px;
   }
+  
+  .instagramLink {
+    width: 26px;
+    height: 26px;
+    margin-left: 0px;
+  }
+}
+
+.instagramLink {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  margin-left: 6px;
+  padding: 0;
+  text-decoration: none;
+}
+
+.instagramLink:hover {
+  background: var(--bg-secondary);
+  color: var(--color-blue);
+  border-color: var(--color-blue);
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  .instagramLink {
+    width: 28px;
+    height: 28px;
+    margin-left: 2px;
+  }
 }

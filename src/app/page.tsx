@@ -177,7 +177,22 @@ export default function Home() {
           transition: "background-color 0.3s ease, border-color 0.3s ease",
         }}
       >
-        <div className="footer-content">
+        <div className="footer-content" style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" }}>
+          <a
+            href="https://www.instagram.com/d1gg.us?igsh=MWFnYW9lNGczcnRjMg=="
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "var(--color-blue)",
+              textDecoration: "none",
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px"
+            }}
+          >
+            Follow us on Instagram: @d1gg.us
+          </a>
           <span>&copy; {new Date().getFullYear()} d1ggas. All rights reserved.</span>
         </div>
       </footer>
