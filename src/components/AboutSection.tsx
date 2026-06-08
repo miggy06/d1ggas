@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X } from "lucide-react";
 import styles from "./PortfolioLayout.module.css";
@@ -112,10 +113,20 @@ export default function AboutSection() {
             <div
               className={styles.avatarInitials}
               style={{
-                background: member.gradient,
+                background: member.image ? "transparent" : member.gradient,
               }}
             >
-              {member.initials}
+              {member.image ? (
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
+                  sizes="60px"
+                  style={{ objectFit: "cover" }}
+                />
+              ) : (
+                member.initials
+              )}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
               <span className={styles.cardName}>{member.name}</span>
@@ -158,13 +169,23 @@ export default function AboutSection() {
                 <div
                   className={styles.avatarInitials}
                   style={{
-                    background: selectedMember.gradient,
+                    background: selectedMember.image ? "transparent" : selectedMember.gradient,
                     width: "60px",
                     height: "60px",
                     fontSize: "1.3rem",
                   }}
                 >
-                  {selectedMember.initials}
+                  {selectedMember.image ? (
+                    <Image
+                      src={selectedMember.image}
+                      alt={selectedMember.name}
+                      fill
+                      sizes="60px"
+                      style={{ objectFit: "cover" }}
+                    />
+                  ) : (
+                    selectedMember.initials
+                  )}
                 </div>
                 <div className={styles.drawerMeta}>
                   <h3 className={styles.drawerName}>{selectedMember.name}</h3>

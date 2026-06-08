@@ -11,6 +11,7 @@ export interface CrewMember {
   status: string;
   instagram: string;
   bio: string;
+  image?: string;
 }
 
 export const crewMembers: CrewMember[] = [
@@ -20,13 +21,14 @@ export const crewMembers: CrewMember[] = [
     initials: "RF",
     gradient: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     color: "#3b82f6",
-    birthday: "[Insert Birthday]",
-    favColor: "[Insert Favorite Color]",
-    favFood: "[Insert Favorite Food]",
-    hobby: "[Insert Hobby]",
+    birthday: "July 6, 2009",
+    favColor: "Maroon, Midnight Blue, Emerald",
+    favFood: "Pizza, Pasta, Burger, Fries",
+    hobby: "play volleyball, play online games",
     status: "[Insert Relationship Status]",
-    instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]"
+    instagram: "https://www.instagram.com/rndlf_mgl?igsh=MTJnYm01Z2VjY2Nqaw==",
+    bio: "pinaka gwapo sa d1ggas",
+    image: "/assets/profiles/randelf.png"
   },
   {
     id: "paola",
@@ -34,13 +36,14 @@ export const crewMembers: CrewMember[] = [
     initials: "PL",
     gradient: "linear-gradient(135deg, #581c87 0%, #a855f7 100%)",
     color: "#a855f7",
-    birthday: "[Insert Birthday]",
-    favColor: "[Insert Favorite Color]",
-    favFood: "[Insert Favorite Food]",
-    hobby: "[Insert Hobby]",
+    birthday: "secret",
+    favColor: "fenk 🩷",
+    favFood: "anything stroberi",
+    hobby: "eat 🤪😍🥰",
     status: "[Insert Relationship Status]",
-    instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]"
+    instagram: "https://www.instagram.com/_redhh?igsh=dnhjMXIwcHNqcDRn&utm_source=qr",
+    bio: "cute ko 🥺",
+    image: "/assets/profiles/paola.png"
   },
   {
     id: "krishanna",
@@ -48,13 +51,14 @@ export const crewMembers: CrewMember[] = [
     initials: "KS",
     gradient: "linear-gradient(135deg, #831843 0%, #ec4899 100%)",
     color: "#ec4899",
-    birthday: "[Insert Birthday]",
-    favColor: "[Insert Favorite Color]",
-    favFood: "[Insert Favorite Food]",
-    hobby: "[Insert Hobby]",
+    birthday: "April 15, 2010",
+    favColor: "burgundy red",
+    favFood: "carbonara, choco wafers, bread ug imong mama",
+    hobby: "tanaw ug mukbang",
     status: "[Insert Relationship Status]",
-    instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]"
+    instagram: "https://www.instagram.com/_shakiiz?igsh=ZXBobDk3MHhwaDZs&utm_source=qr",
+    bio: "kulot, pinaka cute sa kalibutan",
+    image: "/assets/profiles/krishanna.png"
   },
   {
     id: "francis",
@@ -68,7 +72,8 @@ export const crewMembers: CrewMember[] = [
     hobby: "[Insert Hobby]",
     status: "[Insert Relationship Status]",
     instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]"
+    bio: "[Insert brief bio or description about yourself]",
+    image: "/assets/profiles/francis.png"
   },
   {
     id: "rheanne",
@@ -76,13 +81,14 @@ export const crewMembers: CrewMember[] = [
     initials: "RN",
     gradient: "linear-gradient(135deg, #78350f 0%, #f59e0b 100%)",
     color: "#f59e0b",
-    birthday: "[Insert Birthday]",
-    favColor: "[Insert Favorite Color]",
-    favFood: "[Insert Favorite Food]",
-    hobby: "[Insert Hobby]",
+    birthday: "March 02, 2010",
+    favColor: "Yellow",
+    favFood: "bread, fries, and kimchi",
+    hobby: "malibang",
     status: "[Insert Relationship Status]",
-    instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]"
+    instagram: "https://www.instagram.com/ynabiwhs_n?igsh=MWFlNm9mZ2hnM3R0MA==",
+    bio: "tall 💯",
+    image: "/assets/profiles/rheanne.png"
   },
   {
     id: "ayeisha",
@@ -90,13 +96,14 @@ export const crewMembers: CrewMember[] = [
     initials: "AS",
     gradient: "linear-gradient(135deg, #064e3b 0%, #10b981 100%)",
     color: "#10b981",
-    birthday: "[Insert Birthday]",
-    favColor: "[Insert Favorite Color]",
-    favFood: "[Insert Favorite Food]",
-    hobby: "[Insert Hobby]",
+    birthday: "July 08, 2010",
+    favColor: "Navy Blue, Forest Green",
+    favFood: "Sushi",
+    hobby: "Reading books",
     status: "[Insert Relationship Status]",
-    instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]"
+    instagram: "https://www.instagram.com/hyaa_xsz?igsh=MWFvYzJzbnBlZDllcQ==",
+    bio: "Bipolar dw ko ana sila (save me)",
+    image: "/assets/profiles/ayeisha.png"
   },
   {
     id: "jeremy",
@@ -110,6 +117,7 @@ export const crewMembers: CrewMember[] = [
     hobby: "[Insert Hobby]",
     status: "[Insert Relationship Status]",
     instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]"
+    bio: "[Insert brief bio or description about yourself]",
+    image: "/assets/profiles/jeremy.png"
   }
 ];
