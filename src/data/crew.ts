@@ -111,13 +111,13 @@ export const crewMembers: CrewMember[] = [
     initials: "JM",
     gradient: "linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%)",
     color: "#ef4444",
-    birthday: "[Insert Birthday]",
-    favColor: "[Insert Favorite Color]",
-    favFood: "[Insert Favorite Food]",
-    hobby: "[Insert Hobby]",
+    birthday: "February 16, 2010",
+    favColor: "olive green, navy blue, dark red",
+    favFood: "thin crust pizza",
+    hobby: "all of the above",
     status: "[Insert Relationship Status]",
-    instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]",
+    instagram: "https://www.instagram.com/reyachz_?igsh=eWYxNHlrazRjaWw4",
+    bio: "Tall, Dark, And Handsome 👀",
     image: "/assets/profiles/jeremy.png"
   }
 ];
