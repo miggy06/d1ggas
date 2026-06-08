@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "d1ggas",
-  description: "A digital sanctuary for eight friends. Connected by chaos, defined by style.",
+  description: "A digital sanctuary for seven friends. Connected by chaos, defined by style.",
 };
 
 export default function RootLayout({

@@ -77,12 +77,12 @@ export default function AboutSection() {
         <h2 className="section-title">About Us</h2>
         
         <p style={{ color: "var(--text-secondary)", marginBottom: "40px", maxWidth: "600px" }}>
-          We are a group of 8 friends bound by shared experiences, jokes, and countless memories.
+          We are a group of 7 friends bound by shared experiences, jokes, and countless memories.
           Select any profile to view our specialties, statistics, and roles within the crew.
         </p>
       </motion.div>
 
-      {/* Grid of 8 Friends - animated on entry */}
+      {/* Grid of 7 Friends - animated on entry */}
       <motion.div 
         className={styles.crewGrid}
         variants={containerVariants}

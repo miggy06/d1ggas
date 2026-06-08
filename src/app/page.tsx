@@ -139,7 +139,7 @@ export default function Home() {
             <div className={styles.heroBottomRow}>
               <motion.div className={styles.heroDescription} variants={heroItemVariants}>
                 <p>Connected by chaos, defined by style.</p>
-                <p style={{ marginTop: "8px" }}>A digital sanctuary for eight friends sharing memories and tracking progress.</p>
+                <p style={{ marginTop: "8px" }}>A digital sanctuary for seven friends sharing memories and tracking progress.</p>
               </motion.div>
 
               <motion.div className={styles.heroToggleWrapper} variants={heroButtonVariants}>

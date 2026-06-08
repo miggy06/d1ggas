@@ -99,20 +99,6 @@ export const crewMembers: CrewMember[] = [
     bio: "[Insert brief bio or description about yourself]"
   },
   {
-    id: "xian",
-    name: "Xian",
-    initials: "XN",
-    gradient: "linear-gradient(135deg, #312e81 0%, #6366f1 100%)",
-    color: "#6366f1",
-    birthday: "[Insert Birthday]",
-    favColor: "[Insert Favorite Color]",
-    favFood: "[Insert Favorite Food]",
-    hobby: "[Insert Hobby]",
-    status: "[Insert Relationship Status]",
-    instagram: "[Insert Instagram Username]",
-    bio: "[Insert brief bio or description about yourself]"
-  },
-  {
     id: "jeremy",
     name: "Jeremy",
     initials: "JM",
