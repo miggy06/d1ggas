@@ -285,12 +285,7 @@ export default function AboutSection() {
                       </div>
                     </div>
 
-                    <div className={styles.profileBioSection}>
-                      <span className={styles.bioLabel}>Crew Vibe</span>
-                      <p className={styles.bioText}>
-                        When not busy with hobbies like {selectedMember.hobby || "hanging out"}, {selectedMember.name} helps shape the culture and layout of the d1ggas crew.
-                      </p>
-                    </div>
+
                   </motion.div>
                 )}
 
