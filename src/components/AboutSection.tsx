@@ -30,26 +30,7 @@ const cardVariants: Variants = {
   },
 };
 
-interface MemberStats {
-  vibe: number;
-  social: number;
-  logic: number;
-  humour: number;
-}
 
-const getMemberStats = (id: string): MemberStats => {
-  const statsMap: Record<string, MemberStats> = {
-    randelf: { vibe: 92, social: 75, logic: 96, humour: 88 },
-    paola: { vibe: 96, social: 92, logic: 65, humour: 90 },
-    krishanna: { vibe: 94, social: 88, logic: 70, humour: 95 },
-    francis: { vibe: 88, social: 80, logic: 92, humour: 85 },
-    rheanne: { vibe: 95, social: 86, logic: 72, humour: 90 },
-    ayeisha: { vibe: 90, social: 94, logic: 60, humour: 92 },
-    xian: { vibe: 86, social: 70, logic: 96, humour: 80 },
-    jeremy: { vibe: 91, social: 82, logic: 89, humour: 88 }
-  };
-  return statsMap[id] || { vibe: 85, social: 80, logic: 80, humour: 85 };
-};
 
 const getInstagramUsername = (url: string): string => {
   if (!url || url.includes("[Insert") || !url.startsWith("http")) {
@@ -70,7 +51,7 @@ const getInstagramUsername = (url: string): string => {
 
 export default function AboutSection() {
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
-  const [activeTab, setActiveTab] = useState<"profile" | "interests" | "stats">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "interests">("profile");
 
   // Lock body scroll when drawer details modal is open
   useEffect(() => {
@@ -91,8 +72,7 @@ export default function AboutSection() {
 
   const tabs = [
     { id: "profile", label: "Profile" },
-    { id: "interests", label: "Interests" },
-    { id: "stats", label: "Stats" }
+    { id: "interests", label: "Interests" }
   ];
 
   return (
@@ -314,88 +294,7 @@ export default function AboutSection() {
                   </motion.div>
                 )}
 
-                {activeTab === "stats" && (
-                  <motion.div
-                    key="stats"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className={styles.drawerStatsGrid} style={{ marginTop: "16px", marginBottom: "20px" }}>
-                      <div className={styles.statItem}>
-                        <div className={styles.statHeader}>
-                          <span>Vibe Level</span>
-                          <span>{getMemberStats(selectedMember.id).vibe}%</span>
-                        </div>
-                        <div className={styles.statBarBg}>
-                          <motion.div
-                            className={styles.statBarFill}
-                            style={{ backgroundColor: selectedMember.color }}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${getMemberStats(selectedMember.id).vibe}%` }}
-                            transition={{ duration: 0.7, ease: "easeOut" }}
-                          />
-                        </div>
-                      </div>
 
-                      <div className={styles.statItem}>
-                        <div className={styles.statHeader}>
-                          <span>Social Power</span>
-                          <span>{getMemberStats(selectedMember.id).social}%</span>
-                        </div>
-                        <div className={styles.statBarBg}>
-                          <motion.div
-                            className={styles.statBarFill}
-                            style={{ backgroundColor: selectedMember.color }}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${getMemberStats(selectedMember.id).social}%` }}
-                            transition={{ duration: 0.7, ease: "easeOut", delay: 0.08 }}
-                          />
-                        </div>
-                      </div>
-
-                      <div className={styles.statItem}>
-                        <div className={styles.statHeader}>
-                          <span>Coding & Logic</span>
-                          <span>{getMemberStats(selectedMember.id).logic}%</span>
-                        </div>
-                        <div className={styles.statBarBg}>
-                          <motion.div
-                            className={styles.statBarFill}
-                            style={{ backgroundColor: selectedMember.color }}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${getMemberStats(selectedMember.id).logic}%` }}
-                            transition={{ duration: 0.7, ease: "easeOut", delay: 0.16 }}
-                          />
-                        </div>
-                      </div>
-
-                      <div className={styles.statItem}>
-                        <div className={styles.statHeader}>
-                          <span>Humour & Jokes</span>
-                          <span>{getMemberStats(selectedMember.id).humour}%</span>
-                        </div>
-                        <div className={styles.statBarBg}>
-                          <motion.div
-                            className={styles.statBarFill}
-                            style={{ backgroundColor: selectedMember.color }}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${getMemberStats(selectedMember.id).humour}%` }}
-                            transition={{ duration: 0.7, ease: "easeOut", delay: 0.24 }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={styles.profileBioSection}>
-                      <span className={styles.bioLabel}>Sanctuary Telemetry</span>
-                      <p className={styles.bioText}>
-                        These indexes are computed based on crew activity, chat engagement rates, and custom vibe telemetry metrics in our sanctuary databases.
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
               </AnimatePresence>
             </motion.div>
           </motion.div>
