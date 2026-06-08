@@ -51,6 +51,23 @@ const getMemberStats = (id: string): MemberStats => {
   return statsMap[id] || { vibe: 85, social: 80, logic: 80, humour: 85 };
 };
 
+const getInstagramUsername = (url: string): string => {
+  if (!url || url.includes("[Insert") || !url.startsWith("http")) {
+    return url || "Not set";
+  }
+  try {
+    const urlObj = new URL(url);
+    const pathSegments = urlObj.pathname.split("/").filter(Boolean);
+    if (pathSegments.length > 0) {
+      return `@${pathSegments[0]}`;
+    }
+    return url;
+  } catch (e) {
+    const match = url.match(/instagram\.com\/([a-zA-Z0-9_\.]+)/);
+    return match ? `@${match[1]}` : url;
+  }
+};
+
 export default function AboutSection() {
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
   const [activeTab, setActiveTab] = useState<"profile" | "interests" | "stats">("profile");
@@ -244,8 +261,19 @@ export default function AboutSection() {
  
                       <div className={styles.profileDetailItem}>
                         <span className={styles.detailLabel}>Instagram / Contact</span>
-                        <span className={styles.detailValue} style={{ color: "var(--color-blue)", fontFamily: "var(--font-mono)" }}>
-                          {selectedMember.instagram}
+                        <span className={styles.detailValue} style={{ fontFamily: "var(--font-mono)" }}>
+                          {selectedMember.instagram && selectedMember.instagram.startsWith("http") ? (
+                            <a
+                              href={selectedMember.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.instagramLink}
+                            >
+                              {getInstagramUsername(selectedMember.instagram)}
+                            </a>
+                          ) : (
+                            selectedMember.instagram || "Not set"
+                          )}
                         </span>
                       </div>
                     </div>

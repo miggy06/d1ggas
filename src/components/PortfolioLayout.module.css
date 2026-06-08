@@ -490,3 +490,15 @@
   z-index: 10;
 }
 
+.instagramLink {
+  color: var(--color-blue) !important;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.instagramLink:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
