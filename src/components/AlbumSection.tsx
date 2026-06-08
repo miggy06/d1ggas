@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { Plus, Trash2, ChevronLeft, ChevronRight, Download, X } from "lucide-react";
+import { Plus, Trash2, ChevronLeft, ChevronRight, Download, X, LayoutGrid, Images } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Album.module.css";
 import Magnetic from "./Magnetic";
@@ -112,6 +112,7 @@ export default function AlbumSection() {
   const [images, setImages] = useState<AlbumImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [viewMode, setViewMode] = useState<"carousel" | "gallery">("carousel");
   const [enlargedImage, setEnlargedImage] = useState<AlbumImage | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -308,125 +309,199 @@ export default function AlbumSection() {
       >
         <h2 className="section-title">Memory Album</h2>
 
-        <p style={{ color: "var(--text-secondary)", marginBottom: "30px", maxWidth: "600px" }}>
+        <p style={{ color: "var(--text-secondary)", marginBottom: "20px", maxWidth: "600px" }}>
           Tap once to focus a picture, and tap again to enlarge. Use navigation buttons to scroll infinitely.
         </p>
+
+        {/* View Mode Toggle */}
+        {images.length > 1 && (
+          <div className={styles.toggleWrapper}>
+            <div className={styles.toggleCapsule}>
+              <button
+                className={`${styles.toggleBtn} ${viewMode === "carousel" ? styles.toggleActive : ""}`}
+                onClick={() => setViewMode("carousel")}
+              >
+                <Images size={14} />
+                <span>Carousel</span>
+                {viewMode === "carousel" && (
+                  <motion.div
+                    layoutId="viewHighlight"
+                    className={styles.activeToggleBg}
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                  />
+                )}
+              </button>
+              <button
+                className={`${styles.toggleBtn} ${viewMode === "gallery" ? styles.toggleActive : ""}`}
+                onClick={() => setViewMode("gallery")}
+              >
+                <LayoutGrid size={14} />
+                <span>Gallery</span>
+                {viewMode === "gallery" && (
+                  <motion.div
+                    layoutId="viewHighlight"
+                    className={styles.activeToggleBg}
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                  />
+                )}
+              </button>
+            </div>
+          </div>
+        )}
       </motion.div>
 
-      {/* Horizontal Loop Coverflow Carousel */}
-      <div className={styles.carouselOuter}>
-        {/* Transparent Click Zones for Navigation (covers side cards) */}
-        {images.length > 1 && (
-          <>
-            <div 
-              className={styles.carouselClickZoneLeft} 
-              onClick={handlePrev} 
-              title="Previous Photo"
-            />
-            <div 
-              className={styles.carouselClickZoneRight} 
-              onClick={handleNext} 
-              title="Next Photo"
-            />
-          </>
-        )}
-
-        {/* Navigation Buttons (Left) */}
-        {images.length > 1 && (
-          <button 
-            className={`${styles.navBtn} ${styles.leftBtn}`} 
-            onClick={handlePrev} 
-            aria-label="Previous image"
-          >
-            <ChevronLeft size={20} />
-          </button>
-        )}
-
-        {/* Navigation Buttons (Right) */}
-        {images.length > 1 && (
-          <button 
-            className={`${styles.navBtn} ${styles.rightBtn}`} 
-            onClick={handleNext} 
-            aria-label="Next image"
-          >
-            <ChevronRight size={20} />
-          </button>
-        )}
-
-        <div className={styles.carouselTrack}>
-          {images.map((img, index) => {
-            const N = images.length;
-            // Calculate shortest circular difference for infinite loop illusion
-            let diff = index - activeIndex;
-            if (diff < -N / 2) diff += N;
-            if (diff > N / 2) diff -= N;
-
-            const absDiff = Math.abs(diff);
-            const isActive = diff === 0;
-            const isVisible = absDiff <= 2; // Render center, inner neighbors, and outer neighbors
-
-            if (!isVisible) return null;
-
-            // Coverflow Style Parameters
-            const scale = isActive ? 1.06 : 0.88;
-            const zIndex = 10 - absDiff;
-            const blur = isActive ? "blur(0px)" : "blur(1.5px)";
-            const opacity = isActive ? 1 : (absDiff === 1 ? 0.48 : 0.15);
-            const pointerEvents = absDiff <= 1 ? "auto" : "none";
-
-            return (
-              <div
-                key={img.id}
-                className={`${styles.albumCard} ${isActive ? styles.activeCard : styles.sideCard}`}
-                style={{
-                  transform: `translate(calc(-50% + (${diff} * (var(--card-width) + var(--card-gap)))), -50%) scale(${scale})`,
-                  opacity,
-                  zIndex,
-                  filter: blur,
-                  pointerEvents,
-                }}
-                onClick={() => isActive ? setEnlargedImage(img) : setActiveIndex(index)}
-              >
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className={styles.albumImage}
-                  priority={index < 3}
+      {viewMode === "carousel" ? (
+        <>
+          {/* Horizontal Loop Coverflow Carousel */}
+          <div className={styles.carouselOuter}>
+            {/* Transparent Click Zones for Navigation (covers side cards) */}
+            {images.length > 1 && (
+              <>
+                <div 
+                  className={styles.carouselClickZoneLeft} 
+                  onClick={handlePrev} 
+                  title="Previous Photo"
                 />
-                
-                {/* Delete Button on Active centered card */}
-                {isActive && (
-                  <button
-                    className={styles.deleteBtn}
-                    onClick={(e) => {
-                      e.stopPropagation(); // Avoid triggering card enlarge click
-                      handleDeleteImage(img.id);
-                    }}
-                    title="Delete Photo"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
+                <div 
+                  className={styles.carouselClickZoneRight} 
+                  onClick={handleNext} 
+                  title="Next Photo"
+                />
+              </>
+            )}
 
-      {/* Dot Indicators */}
-      {images.length > 1 && (
-        <div className={styles.dotIndicators}>
-          {images.map((_, idx) => (
-            <button
-              key={idx}
-              className={`${styles.dot} ${idx === activeIndex ? styles.activeDot : ""}`}
-              onClick={() => setActiveIndex(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
+            {/* Navigation Buttons (Left) */}
+            {images.length > 1 && (
+              <button 
+                className={`${styles.navBtn} ${styles.leftBtn}`} 
+                onClick={handlePrev} 
+                aria-label="Previous image"
+              >
+                <ChevronLeft size={20} />
+              </button>
+            )}
+
+            {/* Navigation Buttons (Right) */}
+            {images.length > 1 && (
+              <button 
+                className={`${styles.navBtn} ${styles.rightBtn}`} 
+                onClick={handleNext} 
+                aria-label="Next image"
+              >
+                <ChevronRight size={20} />
+              </button>
+            )}
+
+            <div className={styles.carouselTrack}>
+              {images.map((img, index) => {
+                const N = images.length;
+                // Calculate shortest circular difference for infinite loop illusion
+                let diff = index - activeIndex;
+                if (diff < -N / 2) diff += N;
+                if (diff > N / 2) diff -= N;
+
+                const absDiff = Math.abs(diff);
+                const isActive = diff === 0;
+                const isVisible = absDiff <= 2; // Render center, inner neighbors, and outer neighbors
+
+                if (!isVisible) return null;
+
+                // Coverflow Style Parameters
+                const scale = isActive ? 1.06 : 0.88;
+                const zIndex = 10 - absDiff;
+                const blur = isActive ? "blur(0px)" : "blur(1.5px)";
+                const opacity = isActive ? 1 : (absDiff === 1 ? 0.48 : 0.15);
+                const pointerEvents = absDiff <= 1 ? "auto" : "none";
+
+                return (
+                  <div
+                    key={img.id}
+                    className={`${styles.albumCard} ${isActive ? styles.activeCard : styles.sideCard}`}
+                    style={{
+                      transform: `translate(calc(-50% + (${diff} * (var(--card-width) + var(--card-gap)))), -50%) scale(${scale})`,
+                      opacity,
+                      zIndex,
+                      filter: blur,
+                      pointerEvents,
+                    }}
+                    onClick={() => isActive ? setEnlargedImage(img) : setActiveIndex(index)}
+                  >
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className={styles.albumImage}
+                      priority={index < 3}
+                    />
+                    
+                    {/* Delete Button on Active centered card */}
+                    {isActive && (
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Avoid triggering card enlarge click
+                          handleDeleteImage(img.id);
+                        }}
+                        title="Delete Photo"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Dot Indicators */}
+          {images.length > 1 && (
+            <div className={styles.dotIndicators}>
+              {images.map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`${styles.dot} ${idx === activeIndex ? styles.activeDot : ""}`}
+                  onClick={() => setActiveIndex(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        /* Grid Gallery View */
+        <motion.div
+          className={styles.galleryGrid}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          {images.map((img) => (
+            <div
+              key={img.id}
+              className={styles.galleryCard}
+              onClick={() => setEnlargedImage(img)}
+            >
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                sizes="(max-width: 768px) 100vw, 25vw"
+                className={styles.galleryImage}
+              />
+              <button
+                className={styles.galleryDeleteBtn}
+                onClick={(e) => {
+                  e.stopPropagation(); // Avoid triggering lightbox click
+                  handleDeleteImage(img.id);
+                }}
+                title="Delete Photo"
+              >
+                <Trash2 size={15} />
+              </button>
+            </div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* Upload memory Action Button */}
