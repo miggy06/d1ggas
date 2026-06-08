@@ -136,12 +136,15 @@
 
 /* Crew Profiles Grid */
 .crewGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
 }
 
 .crewCard {
+  flex: 1 1 220px;
+  max-width: 230px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   padding: 24px;
@@ -356,10 +359,6 @@
   .heroDescription {
     font-size: 1rem;
   }
-  
-  .crewGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 500px) {
@@ -374,8 +373,8 @@
     letter-spacing: -2px;
   }
 
-  .crewGrid {
-    grid-template-columns: 1fr;
+  .crewCard {
+    max-width: 100%;
   }
   
   .drawer {
