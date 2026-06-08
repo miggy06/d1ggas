@@ -94,7 +94,7 @@ export default function Home() {
       <Header />
 
       {/* Main Single-Page Portfolio Layout */}
-      <main style={{ width: "100%", margin: "0 auto", position: "relative", zIndex: 5 }}>
+      <main style={{ width: "100%", margin: "0 auto", position: "relative" }}>
         
         {/* 1. Hero Section (Sapir Roche style) */}
         <section id="hero" className={styles.heroContainer}>

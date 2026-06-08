@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X } from "lucide-react";
 import styles from "./PortfolioLayout.module.css";
@@ -53,6 +53,18 @@ const getMemberStats = (id: string): MemberStats => {
 export default function AboutSection() {
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
   const [activeTab, setActiveTab] = useState<"profile" | "interests" | "stats">("profile");
+
+  // Lock body scroll when drawer details modal is open
+  useEffect(() => {
+    if (selectedMember) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedMember]);
 
   const handleOpenProfile = (member: CrewMember) => {
     setActiveTab("profile");

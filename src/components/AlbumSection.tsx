@@ -116,6 +116,18 @@ export default function AlbumSection() {
   const [enlargedImage, setEnlargedImage] = useState<AlbumImage | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Lock body scroll when photo lightbox is open
+  useEffect(() => {
+    if (enlargedImage) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [enlargedImage]);
+
   // Load photos on mount from Vercel Blob cloud bucket
   useEffect(() => {
     const fetchImages = async () => {
