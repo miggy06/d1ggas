@@ -36,7 +36,7 @@ export const crewMembers: CrewMember[] = [
     initials: "PL",
     gradient: "linear-gradient(135deg, #581c87 0%, #a855f7 100%)",
     color: "#a855f7",
-    birthday: "secret",
+    birthday: "March 2, 2010",
     favColor: "fenk 🩷",
     favFood: "anything stroberi",
     hobby: "eat 🤪😍🥰",
