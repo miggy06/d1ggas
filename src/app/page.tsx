@@ -138,8 +138,8 @@ export default function Home() {
             {/* Bottom row: Subtitle on left, "Work with Me" toggle style button on right */}
             <div className={styles.heroBottomRow}>
               <motion.div className={styles.heroDescription} variants={heroItemVariants}>
-                <p>Connected by chaos, defined by style.</p>
-                <p style={{ marginTop: "8px" }}>A digital sanctuary for seven friends sharing memories and tracking progress.</p>
+                <p>They say good things come in threes, but chaos comes in sevens.</p>
+                <p style={{ marginTop: "8px" }}>Just a bunch of cheeky individuals doing life our own way.</p>
               </motion.div>
 
               <motion.div className={styles.heroToggleWrapper} variants={heroButtonVariants}>

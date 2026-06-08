@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "d1ggas",
-  description: "A digital sanctuary for seven friends. Connected by chaos, defined by style.",
+  description: "They say good things come in threes, but chaos comes in sevens. Just a bunch of cheeky individuals doing life our own way.",
 };
 
 export default function RootLayout({
