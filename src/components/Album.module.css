@@ -553,3 +553,22 @@
     transform: scale(1);
   }
 }
+
+@media (max-width: 600px) {
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 12px;
+  }
+  
+  .galleryCard {
+    border-radius: 8px;
+  }
+  
+  .galleryDeleteBtn {
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+  }
+}
